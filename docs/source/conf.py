@@ -2,9 +2,9 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'Edulearn'
+copyright = '2026, 4a1'
+author = '4a1'
 
 release = '0.1'
 version = '0.1.0'
