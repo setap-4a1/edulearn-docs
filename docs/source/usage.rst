@@ -6,11 +6,14 @@ Usage
 Installation
 ------------
 
-To use Lumache, first install it using pip:
+To run Edulearn, clone the repo at https://github.com/setap-4a1/Edulearn, install dependencies, and run the Flask project:
 
 .. code-block:: console
 
-   (.venv) $ pip install lumache
+   $ git clone https://github.com/setap-4a1/Edulearn.git
+   $ cd Edulearn
+   $ pip install -r requirements.txt
+   $ flask run
 
 Creating recipes
 ----------------
