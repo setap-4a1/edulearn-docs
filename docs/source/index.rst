@@ -1,10 +1,8 @@
-Welcome to Lumache's documentation!
+About Edulearn
 ===================================
 
-**Lumache** (/lu'make/) is a Python library for cooks and food lovers
-that creates recipes mixing random ingredients.
-It pulls data from the `Open Food Facts database <https://world.openfoodfacts.org/>`_
-and offers a *simple* and *intuitive* API.
+Edulearn is a Flask application that allows users to revise questions on a variety of STEM topics.  
+It allows users to view data on questions they get (in)correct to give insights on topics that need further improvement.  
 
 Check out the :doc:`usage` section for further information, including
 how to :ref:`installation` the project.
