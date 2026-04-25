@@ -312,7 +312,7 @@ Feedback list
 -------------
 | This page gives a summary of previously completed quizzes, with topic name and correct/incorrect answer counts.
 .. image:: images/feedback_list.png
-    
+
 | The main section of code for the quiz feedback list view:
 .. code-block:: html
 
@@ -341,6 +341,7 @@ Feedback list
 | Like the quiz form, this page expects to have the feedback data provided to it when it is loaded.
 | This page leans heavily on Jinja to dynamically display data within the template.
 | The view feedback button will take the user directly to the feedback detail view for that particular feedback object.
+| Much of the styling is re-used from the start quiz form.
 Feedback detail view
 --------------------
 
