@@ -16,7 +16,12 @@ Navbar/base
 
 Front page
 ----------
+Hero section
+````````````
 | The front page has some blurb in a hero section, as well as linking to the start quiz form.
+Feature cards
+````````````
+| There are a couple of swanky styled cards, but the styling is a little fiddly; the feature cards are wrapped in their own dedicated 'features-section', 'features-grid' and 'features-card' classes.
 .. code-block:: html
 
     <section class="features-section">
@@ -38,7 +43,13 @@ Front page
             </div>
         </div>
     </section>
-| There are a couple of swanky styled cards
+
+| The feature cards float up a bit on hover, too:
+.. code-block:: css 
+
+    .feature-card:hover {
+    transform: translateY(-5px);
+   }
 
 Start Quiz page
 ---------------
