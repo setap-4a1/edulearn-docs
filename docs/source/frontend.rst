@@ -100,6 +100,38 @@ Start Quiz form
 
 Quiz form
 ---------
+| The quiz form displays multiple-choice questions to users, showing them correct/incorrect on answer selection.
+| Here's the code for the form itself:
+.. code-block:: html
+
+    <div class="container">
+      <div class="question-box">
+        <p id="questionCounter" class="question-counter">Question 1 out of {{ questions | length }}</p>
+
+        {% for question in questions %}
+        {% set qIndex = loop.index %}
+        <div class="question" id="question{{ qIndex }}" {% if not loop.first %}style="display: none;"{% endif %}>
+          <h2>{{ question.name }}</h2>
+          <form class="quiz-form">
+            {% for option in question.options %}
+            <label class="option">
+              <input type="checkbox" name="answer{{ qIndex }}" value="{{ loop.index0 }}">
+              <span>{{ option }}</span>
+            </label>
+            {% endfor %}
+          </form>
+        </div>
+        {% endfor %}
+
+        <div id="feedback" class="feedback"></div>
+
+        <div class="button-group">
+          <button type="button" class="submit-btn" id="nextBtn" disabled>Next</button>
+          <button type="button" class="submit-btn" id="finishBtn" style="display: none;">Finish</button>
+        </div>
+      </div>
+    </div>
+
 
 Feedback list
 -------------
