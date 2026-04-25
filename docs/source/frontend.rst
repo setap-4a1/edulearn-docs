@@ -16,6 +16,27 @@ Navbar/base
 
 Front page
 ----------
+| The front page has some blurb in a hero section, as well as linking to the start quiz form.::
+    <section class="features-section">
+    <h2>Why Choose EduLearn?</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='quiz.png') }}" alt="Interactive Quizzes" style="width: 75px; height: auto;">
+            </div>
+            <h3>Interactive Quizzes</h3>
+            <p>Engaging challenges designed to test and reinforce your knowledge quickly.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='progress.png') }}" alt="Track Progress" style="width: 65px; height: auto;">
+            </div>
+            <h3>Track Progress</h3>
+            <p>Monitor  your performance over time and see exactly where you can improve.</p>
+        </div>
+    </div>
+</section>
+| There are a couple of swanky styled cards
 
 Start Quiz page
 ---------------
