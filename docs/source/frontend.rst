@@ -16,6 +16,12 @@ Navbar/base
 
 Front page
 ----------
+| The front page is the first thing users will see when visiting Edulearn.
+.. image:: images/frontpage.png
+
+| The main goal of this page is simply to push users to the meat of the website - the quiz functionality.
+| See below a breakdown of the three major sections:
+
 Hero section
 ````````````
 | The front page has some blurb in a hero section, as well as linking to the start quiz form.
