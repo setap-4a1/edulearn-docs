@@ -136,6 +136,7 @@ Quiz form
 | Syntax highlighting for this code block is Jinja only, but it does help show how Jinja affords us the flexibility to dynamically render multiple form options based on provided data.
 | The basic way to think of it is: this form takes a set of questions, which each contain a set of options.
 | Jinja allows us to iterate over these bits of data and dynamically populate our form with it.
+| The form itself expects to have all of the question data provided when it is loaded, it's not fetching back and forth multiple times in 1 quiz.
 
 | You may still be confused on what we're doing with this empty 'feedback' div and the two submit buttons.
 | This is where our JavaScript comes in:
@@ -309,7 +310,37 @@ Styling
 
 Feedback list
 -------------
+| This page gives a summary of previously completed quizzes, with topic name and correct/incorrect answer counts.
+.. image:: images/feedback_list.png
+    
+| The main section of code for the quiz feedback list view:
+.. code-block:: html
 
+    <h1>Quiz Feedback</h1>
+    <p>Recent quizzes and their scores.</p>
+
+    <section class="module-grid">
+      {% if quizzes and quizzes|length > 0 %}
+        {% for quiz in quizzes %}
+        <article class="module-card">
+          <h3>{{ quiz.topic|title }}</h3>
+          <p><strong>Total Questions:</strong> {{ quiz.total_questions }}</p>
+          <p><strong>Questions Correct:</strong> {{ quiz.correct_count }}/{{ quiz.total_questions }}</p>
+          <p><strong>% Score:</strong> {{ quiz.score_percent|int }}%</p>
+          <a href="/quiz_feedback?feed_id={{ quiz.feed_id }}" class="start-learning-btn">View Feedback</a>
+        </article>
+        {% endfor %}
+      {% else %}
+        <article class="module-card">
+          <h3>No completed quizzes yet</h3>
+          <p>Finish a quiz to see feedback here.</p>
+        </article>
+      {% endif %}
+    </section>
+
+| Like the quiz form, this page expects to have the feedback data provided to it when it is loaded.
+| This page leans heavily on Jinja to dynamically display data within the template.
+| The view feedback button will take the user directly to the feedback detail view for that particular feedback object.
 Feedback detail view
 --------------------
 
