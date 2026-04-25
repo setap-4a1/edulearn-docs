@@ -15,20 +15,6 @@ To run Edulearn, clone the repo at https://github.com/setap-4a1/Edulearn, instal
    $ pip install -r requirements.txt
    $ flask run
 
-Questions
----------
-
-Questions in Edulearn are multiple-choice, and follow this data structure:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Field
-     - Type
-     - Description
-   * -
-     -
-     -
 
 Starting a Quiz
 ----------------
