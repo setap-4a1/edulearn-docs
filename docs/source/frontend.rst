@@ -137,8 +137,34 @@ Quiz form
 
 | You may still be confused on what we're doing with this empty 'feedback' div and the two submit buttons.
 | This is where our JavaScript comes in:
+
 Quiz form JS
 ''''''''''''
+| We have some functions relating to the form that let us play around with the form without having to leave the page.
+
+showQuestion()
+^^^^^^^^^^^^^^
+.. code-block:: javascript
+
+    function showQuestion(questionNumber) {
+      for (let i = 1; i <= totalQuestions; i++) {
+        document.getElementById(`question${i}`).style.display = 'none';
+      }
+
+      document.getElementById(`question${questionNumber}`).style.display = 'block';
+
+      document.getElementById('questionCounter').textContent = `Question ${questionNumber} out of ${totalQuestions}`;
+
+      document.getElementById('nextBtn').style.display = questionNumber < totalQuestions ? 'inline-block' : 'none';
+      document.getElementById('nextBtn').disabled = true;
+      document.getElementById('finishBtn').style.display = 'none';
+
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('feedback').className = 'feedback';
+    }
+
+| This gets called whenever we display a new question.
+| Basically, we show the relevant data, update question number, clear our correct/incorrect feedback and disable our next/finish button (more on those later)
 
 Feedback list
 -------------
