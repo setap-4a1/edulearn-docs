@@ -32,4 +32,4 @@ Feedback detail view
 Login form
 ----------
 In future, we plan to implement a login form.
-For now, this page simply displays placeholder text.
+For now, this page simply displays a placeholder form, with some plain HTML text entry boxes.
