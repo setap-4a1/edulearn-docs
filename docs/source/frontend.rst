@@ -19,6 +19,16 @@ Front page
 Hero section
 ````````````
 | The front page has some blurb in a hero section, as well as linking to the start quiz form.
+.. code-block:: html
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Welcome to EduLearn</h1>
+            <p>Your one-stop platform for learning and testing your knowledge.</p>
+            <a href="/start_quiz" class="start-learning-btn">Take a quick Quiz</a>
+        </div>
+    </section>
+| Note that the link to start quiz form uses the same styling as the link within the navbar. 
 Feature cards
 ````````````
 | There are a couple of swanky styled cards, but the styling is a little fiddly; the feature cards are wrapped in their own dedicated 'features-section', 'features-grid' and 'features-card' classes.
@@ -50,6 +60,11 @@ Feature cards
     .feature-card:hover {
     transform: translateY(-5px);
    }
+
+Call to action
+``````````````
+| The call to action section is, essentially, a repeat of the hero section.
+| It has its own unique styling which makes it slightly smaller than the hero.
 
 Start Quiz page
 ---------------
