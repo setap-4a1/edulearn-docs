@@ -17,7 +17,7 @@ Navbar/base
 Front page
 ----------
 | The front page has some blurb in a hero section, as well as linking to the start quiz form.
-code-block::
+.. code-block:: html
     <section class="features-section">
     <h2>Why Choose EduLearn?</h2>
     <div class="features-grid">
@@ -36,7 +36,7 @@ code-block::
             <p>Monitor  your performance over time and see exactly where you can improve.</p>
         </div>
     </div>
-</section>
+    </section>
 | There are a couple of swanky styled cards
 
 Start Quiz page
