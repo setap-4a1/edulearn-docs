@@ -143,7 +143,7 @@ Quiz form JS
 | We have some functions relating to the form that let us play around with the form without having to leave the page.
 
 showQuestion
-^^^^^^^^^^^^
+************
 | Code for our show question function:
 .. code-block:: javascript
 
@@ -168,7 +168,7 @@ showQuestion
 | Basically, we show the relevant data, update question number, clear our correct/incorrect feedback and disable our next/finish button (more on those later)
 
 Finish/Next button clicks
-^^^^^^^^^^^^^^^^^^^^^^^^^
+*************************
 .. code-block:: javascript
 
     document.getElementById('nextBtn').addEventListener('click', function() {
@@ -198,8 +198,8 @@ Finish/Next button clicks
 | Our finish button fires off our answers to the backend to eventually be stored as feedback objects.
 
 Answer selection event
-^^^^^^^^^^^^^^^^^^^^^^
-| Last but not last, our answer selection event:
+**********************
+| Last but not least, our answer selection event:
 .. code-block:: javascript
 
     // Enforce single-select behaviour and check answer on selection
