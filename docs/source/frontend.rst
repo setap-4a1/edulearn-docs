@@ -36,7 +36,7 @@ Hero section
     </section>
 | Note that the link to start quiz form uses the same styling as the link within the navbar. 
 Feature cards
-````````````
+`````````````
 | There are a couple of swanky styled cards, but the styling is a little fiddly; the feature cards are wrapped in their own dedicated 'features-section', 'features-grid' and 'features-card' classes.
 .. code-block:: html
 
@@ -139,7 +139,7 @@ Quiz form
 | This is where our JavaScript comes in:
 
 Quiz form JS
-''''''''''''
+````````````
 | We have some functions relating to the form that let us play around with the form without having to leave the page.
 
 showQuestion
