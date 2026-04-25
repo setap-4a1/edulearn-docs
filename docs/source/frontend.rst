@@ -102,7 +102,7 @@ Quiz form
 ---------
 | The quiz form displays multiple-choice questions to users, showing them correct/incorrect on answer selection.
 | Here's the code for the form itself:
-.. code-block:: html
+.. code-block:: jinja
 
     <div class="container">
       <div class="question-box">
