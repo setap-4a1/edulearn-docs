@@ -144,6 +144,7 @@ Quiz form JS
 
 showQuestion
 ^^^^^^^^^^^^
+| Code for our show question function:
 .. code-block:: javascript
 
     function showQuestion(questionNumber) {
@@ -165,6 +166,29 @@ showQuestion
 
 | This gets called whenever we display a new question.
 | Basically, we show the relevant data, update question number, clear our correct/incorrect feedback and disable our next/finish button (more on those later)
+
+Finish/Next button clicks
+^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: javascript
+
+    document.getElementById('nextBtn').addEventListener('click', function() {
+      if (currentQuestion < totalQuestions) {
+        currentQuestion++;
+        showQuestion(currentQuestion);
+      }
+    });
+
+    document.getElementById('finishBtn').addEventListener('click', async function() {
+      const payload = {answers: Object.values(userAnswers)};
+
+      const response = await fetch('/api/submitQuiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+| The next button click is fairly self-explanatory: show the next question if we have one to show.
+| Our finish button fires off our answers to the backend to eventually be stored as feedback objects.
 
 Feedback list
 -------------
