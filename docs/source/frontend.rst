@@ -383,6 +383,7 @@ Feedback detail view
 
 | See the code:
 .. code-block:: html
+
     <section class="feedback-list">
 		<h1>Quiz Feedback Detail</h1>
 
