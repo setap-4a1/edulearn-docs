@@ -197,6 +197,58 @@ Finish/Next button clicks
 | The next button click is fairly self-explanatory: show the next question if we have one to show.
 | Our finish button fires off our answers to the backend to eventually be stored as feedback objects.
 
+Answer selection event
+^^^^^^^^^^^^^^^^^^^^^^
+| Last but not last, our answer selection event:
+.. code-block:: javascript
+
+    // Enforce single-select behaviour and check answer on selection
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        const feedback = document.getElementById('feedback');
+
+        if (this.checked) {
+          document.querySelectorAll(`input[name="${this.name}"]`).forEach(cb => {
+            if (cb !== this) cb.checked = false;
+            cb.disabled = true;
+          });
+
+          const correctOption = questions[currentQuestion - 1].correctOption;
+          if (parseInt(this.value) === correctOption) {
+            feedback.textContent = 'Correct!';
+            feedback.className = 'feedback correct';
+          } else {
+            feedback.textContent = 'Incorrect!';
+            feedback.className = 'feedback incorrect';
+          }
+
+          if (currentQuestion < totalQuestions) {
+            document.getElementById('nextBtn').disabled = false;
+          } else {
+            document.getElementById('finishBtn').style.display = 'inline-block';
+          }
+
+          userAnswers[currentQuestion - 1] = {
+            qID: questions[currentQuestion - 1].id,
+            selected: parseInt(this.value),
+            isCorrect: parseInt(this.value, 10) === questions[currentQuestion - 1].correctOption
+          }
+
+        } else {
+          feedback.textContent = '';
+          feedback.className = 'feedback';
+        }
+      });
+    });
+
+| This will fire on any answer selection.
+| Basically, it will:
+* ensure that only one answer is selected (disable other options)
+* update feedback to display correct/incorrect
+* unlock next/finish button as appropriate
+* store user answer (to send to backend on finish)
+* if, somehow, the user has unchecked an answer, wipe feedback
+
 Feedback list
 -------------
 
