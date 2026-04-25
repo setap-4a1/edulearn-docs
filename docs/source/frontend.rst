@@ -142,8 +142,8 @@ Quiz form JS
 ''''''''''''
 | We have some functions relating to the form that let us play around with the form without having to leave the page.
 
-showQuestion()
-^^^^^^^^^^^^^^
+showQuestion
+^^^^^^^^^^^^
 .. code-block:: javascript
 
     function showQuestion(questionNumber) {
