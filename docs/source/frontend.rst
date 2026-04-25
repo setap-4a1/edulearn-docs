@@ -101,6 +101,8 @@ Start Quiz form
 Quiz form
 ---------
 | The quiz form displays multiple-choice questions to users, showing them correct/incorrect on answer selection.
+.. image:: images/quiz_form.png
+    
 | Here's the code for the form itself:
 .. code-block:: jinja
 
