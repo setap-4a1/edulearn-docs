@@ -17,6 +17,7 @@ Navbar/base
 
 | See the html:
 .. code-block:: html
+
     <!DOCTYPE html>
     <html lang="en">
     <head>
