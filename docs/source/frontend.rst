@@ -1,7 +1,9 @@
 Frontend
 ========
 
-This page will explain different components of the frontend (e.g the Quiz form, login page...)
+The frontend for Edulearn uses the Jinja templating engine, with pages written in HTML/CSS.
+Some components use JavaScript to enable interactivity.
+Here's a breakdown of the frontend, page-by-page:
 
 Navbar
 ------
