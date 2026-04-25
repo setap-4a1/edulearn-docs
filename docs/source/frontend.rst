@@ -131,7 +131,14 @@ Quiz form
         </div>
       </div>
     </div>
+| Syntax highlighting for this code block is Jinja only, but it does help show how Jinja affords us the flexibility to dynamically render multiple form options based on provided data.
+| The basic way to think of it is: this form takes a set of questions, which each contain a set of options.
+| Jinja allows us to iterate over these bits of data and dynamically populate our form with it.
 
+| You may still be confused on what we're doing with this empty 'feedback' div and the two submit buttons.
+| This is where our JavaScript comes in:
+Quiz form JS
+''''''''''''
 
 Feedback list
 -------------
