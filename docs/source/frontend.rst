@@ -72,8 +72,31 @@ Call to action
 | The call to action section is, essentially, a repeat of the hero section.
 | It has its own unique styling which makes it slightly smaller than the hero.
 
-Start Quiz page
+Start Quiz form
 ---------------
+| The start quiz form allows users to choose from 3 different quiz topics.
+.. image:: images/start_quiz_form.png
+
+| There are spinboxes that allow users to pick a value from 3-20:
+.. code-block:: html
+
+    <input name="limit" type="number" min="3" max="20" step="1" value="10">
+
+| These three boxes are each actually their own form; when clicked, they send the user to the quiz form, passing through the selected topic and desired number of questions.
+.. code-block:: html
+
+    <form action="/quiz" method="GET" class="topic-card" style="display: flex; flex-direction: column;">
+        <h2>Mathematics</h2>
+        <p style="flex-grow: 1;">Test your knowledge in Algebra, Geometry, and Calculus.</p>
+        <div class="module-settings">
+            <label>Number of questions:</label>
+            <input name="limit" type="number" min="3" max="20" step="1" value="10">
+        </div>
+        <input type="hidden" name="topic" value="maths">
+        <button type="submit" class="submit-btn">Take a quiz</button>
+    </form>
+
+| Note the form's 'action' property - this causes the submission to pass through the form's 'limit' and 'topic' values directly to the quiz form page.
 
 Quiz form
 ---------
