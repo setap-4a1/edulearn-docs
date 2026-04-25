@@ -13,6 +13,40 @@ Navbar/base
 * The link to the start quiz form is styled with an orange background so it stands out
 * The link to the feedback list has a profile icon (in future, we plan to have individual users be able to view their own feedback)
 * The login link is styled plainly - black text on white (with orange text on hover)
+.. image:: images/navbar.png
+
+| See the html:
+.. code-block:: html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EduLearn{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+    <header>
+        <div class="header-container">
+        <a href="/" class="logo">Edulearn</a>
+        <nav class="nav-buttons">
+            <a href="/start_quiz" class="start-learning-btn">Quiz</a>
+            <a href="/profile"><img src="{{ url_for('static', filename='profile.png') }}" alt="Profile" class="user-icon"></a>
+            <a href="/login" class="nav-btn">Login</a>
+        </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block scripts %}{% endblock %}
+    </body>
+    </html>
+| Note that it looks like pretty standard HTML boilerplate, except that it includes some Jinja (usually denoted by curly braces) that allows it to work alongside other files.
+|
+| Other pages will use {% extends "base.html" %} to include this template.
 
 Front page
 ----------
@@ -344,7 +378,53 @@ Feedback list
 | Much of the styling is re-used from the start quiz form.
 Feedback detail view
 --------------------
+| This page gives a question-by-question breakdown of how users performed on previous quizzes.
+.. image:: images/feedback_detail.png
 
+| See the code:
+.. code-block:: html
+    <section class="feedback-list">
+		<h1>Quiz Feedback Detail</h1>
+
+		{% if error %}
+			<article class="module-card">
+				<p>{{ error }}</p>
+			</article>
+		{% elif summary %}
+			<p>
+				Topic: {{ summary.topic|title }} |
+				Total Questions: {{ summary.total_questions }} |
+				Questions Correct: {{ summary.correct_count }}/{{ summary.total_questions }} |
+				Score: {{ summary.score_percent|int }}%
+			</p>
+
+			{% for row in questions %}
+				{% set options = [row.option_1, row.option_2, row.option_3, row.option_4] %}
+				<article class="module-card">
+					<h3>Question {{ loop.index }}</h3>
+					<p><strong>Question:</strong> {{ row.question_text }}</p>
+					<p><strong>Your answer:</strong> {{ options[row.user_answer_index] }}</p>
+					<p><strong>Correct answer:</strong> {{ options[row.correct_answer_index] }}</p>
+					<p><strong>Result:</strong> {{ 'Correct' if row.is_correct else 'Incorrect' }}</p>
+				</article>
+			{% endfor %}
+		{% else %}
+			<article class="module-card">
+				<p>No feedback data to display.</p>
+			</article>
+		{% endif %}
+
+		<p>
+			<a href="/profile" class="start-learning-btn">Back to Quiz feedback</a>
+		</p>
+	</section>
+| Again, we rely heavily on Jinja here to work with the data the page loads in with.
+| We provide an overview of the performance on this quiz, with correct answers vs incorrect answers and a percentage of correct answers.
+| We reuse the module cards again to display question-by-question feedback, including:
+* question title (e.g 'What is 2+2?')
+* user selected answer
+* correct answer
+* correct/incorrect result for question
 Login form
 ----------
 | In future, we plan to implement a login form.  
