@@ -16,7 +16,8 @@ Navbar/base
 
 Front page
 ----------
-| The front page has some blurb in a hero section, as well as linking to the start quiz form.::
+| The front page has some blurb in a hero section, as well as linking to the start quiz form.
+code-block::
     <section class="features-section">
     <h2>Why Choose EduLearn?</h2>
     <div class="features-grid">
