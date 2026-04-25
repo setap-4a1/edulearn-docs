@@ -186,6 +186,13 @@ Finish/Next button clicks
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
+      const result = await response.json();
+      console.log(result);
+
+      // Redirect to index page
+      window.location.href = '/';
+    });
+
 
 | The next button click is fairly self-explanatory: show the next question if we have one to show.
 | Our finish button fires off our answers to the backend to eventually be stored as feedback objects.
