@@ -102,7 +102,7 @@ Quiz form
 ---------
 | The quiz form displays multiple-choice questions to users, showing them correct/incorrect on answer selection.
 .. image:: images/quiz_form.png
-    
+
 | Here's the code for the form itself:
 .. code-block:: jinja
 
@@ -250,6 +250,62 @@ Answer selection event
 * unlock next/finish button as appropriate
 * store user answer (to send to backend on finish)
 * if, somehow, the user has unchecked an answer, wipe feedback
+
+Styling
+```````
+| Styling for the form itself is pretty light:
+.. code-block:: css
+
+    .quiz-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        text-align: left;
+    }
+
+    .option {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .option:hover {
+        border-color: #f39c12;
+        background-color: #fef5e7;
+    }
+
+    .option input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+
+    .option span {
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    .submit-btn {
+        margin-top: 20px;
+        padding: 15px 30px;
+        background-color: #f39c12;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+| The interactible buttons explicitly set the cursor to pointer, which helps make it a bit more clear to the user.
+| The options flex nice and wide to fit the form, giving the user plenty of room to click.
+| Everything follows the same off-white background + orange accent as the rest of the design.
 
 Feedback list
 -------------
