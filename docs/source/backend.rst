@@ -25,5 +25,14 @@ quiz summaries view '/profile' (profile.html)
         quizzes = DB_query_user_quiz_summaries(user_id)
         return render_template("profile.html", quizzes=quizzes)
 
+Specific profile '/profile/<user_id>'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+| There is a seperate route for loading a particular user's profile page, but this functionality has not been implemented:
+.. code-block:: python
+
+    @app.route("/profile/<user_id>", methods=['GET'])
+    def user(user_id):
+        return render_template("profile.html", user_id)
+
 API
 ---
