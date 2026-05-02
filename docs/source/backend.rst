@@ -266,4 +266,20 @@ Misc helpers
 
 transform_db_question()
 ```````````````````````
-| text
+| This function takes a question from the database format and converts it into the format the frontend expects.
+| This is something we do a lot, so it's moved into its own helper.
+.. code-block:: python
+    
+    def transform_db_question(row):
+        return {
+            "id": row["QUE_ID"],
+            "name": row["QUE_question"],
+            "options": [
+                row["QUE_ans_1"],
+                row["QUE_ans_2"],
+                row["QUE_ans_3"],
+                row["QUE_ans_4"],
+            ],
+            "correctOption": row["QUE_ans_correct"],
+            "topic": row["TOP_name"],
+        }
