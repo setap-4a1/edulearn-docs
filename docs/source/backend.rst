@@ -137,7 +137,18 @@ quiz topic selection view '/start_quiz' (start_quiz.html)
 
 individual question '/question/<int:question_id>' (quiz.html)
 `````````````````````````````````````````````````````````````
-| text
+| This quiz loads the quiz form but with a single question.
+| We return 404 if we can't find the question in the database.
+| Mostly exists for debugging, but nice to have.
+.. code-block:: python
+
+    @app.route('/question/<int:question_id>')
+    def question(question_id):
+        db_question = DB_query_question_by_id(question_id)
+        if db_question is None:
+            return "Question not found", 404
+
+        return render_template("quiz.html", questions=[transform_db_question(db_question)])
 
 API submit quiz '/api/submitQuiz'
 `````````````````````````````````
