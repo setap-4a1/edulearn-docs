@@ -227,3 +227,45 @@ health check 'api/health'
     @app.route('/api/health')
     def health():
         return jsonify({'status': 'ok', 'message': 'Flask app is running'})
+
+Query helpers
+-------------
+
+connector
+`````````
+| text
+
+Questions
+`````````
+
+DB_query_questions_list
+^^^^^^^^^^^^^^^^^^^^^^^
+| text 
+
+DB_query_question_by_id
+^^^^^^^^^^^^^^^^^^^^^^^
+| text
+
+DB_query_questions_ans
+^^^^^^^^^^^^^^^^^^^^^^
+| text
+
+Feedback
+````````
+
+DB_query_insert_feedback
+^^^^^^^^^^^^^^^^^^^^^^^^
+| text
+DB_query_user_quiz_summaries
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+| text
+DB_query_quiz_feedback_detail
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+| text
+
+Misc helpers
+------------
+
+transform_db_question()
+```````````````````````
+| text
