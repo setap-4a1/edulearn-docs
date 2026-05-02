@@ -25,6 +25,26 @@ quiz summaries view '/feedback' (feedback.html)
         quizzes = DB_query_user_quiz_summaries(user_id)
         return render_template("feedback.html", quizzes=quizzes)
 
+quiz feedback detail view '/quiz_feedback' (quiz_feedback.html)
+```````````````````````````````````````````````````````````````
+| text
 
-API
----
+login form view '/login' (login.html)
+`````````````````````````````````````
+| text
+
+quiz form view '/quiz' (quiz.html/start_quiz.html)
+``````````````````````````````````````````````````
+| text
+
+quiz topic selection view '/start_quiz' (start_quiz.html)
+`````````````````````````````````````````````````````````
+| text
+
+individual question '/question/<int:question_id>' (quiz.html)
+`````````````````````````````````````````````````````````````
+| text
+
+API submit quiz '/api/submitQuiz'
+`````````````````````````````````
+| text
