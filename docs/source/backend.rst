@@ -215,3 +215,11 @@ API submit quiz '/api/submitQuiz'
         'answerCount': len(answers),
     }), 200
 
+API health check
+````````````````
+| Simple health check - if this still works we know we haven't nuked the entire app
+.. code-block:: python
+
+    @app.route('/api/health')
+    def health():
+        return jsonify({'status': 'ok', 'message': 'Flask app is running'})
