@@ -15,15 +15,15 @@ frontpage '/' (index.html)
     def home():
         return render_template("index.html")
 
-quiz summaries view '/profile' (profile.html)
+quiz summaries view '/feedback' (feedback.html)
 `````````````````````````````````````````````
-| Our profile route loads the quiz summaries for a given user id (hardcoded to 1) and loads them into the profile.html page.  
+| Our feedback route loads the quiz summaries for a given user id (hardcoded to 1) and loads them into the feedback.html page.  
 .. code-block:: python
-    @app.route("/profile", methods=['GET'])
-    def profile():
+    @app.route("/feedback", methods=['GET'])
+    def feedback():
         user_id = 1
         quizzes = DB_query_user_quiz_summaries(user_id)
-        return render_template("profile.html", quizzes=quizzes)
+        return render_template("feedback.html", quizzes=quizzes)
 
 Specific profile '/profile/<user_id>'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
