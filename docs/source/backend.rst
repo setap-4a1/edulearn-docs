@@ -152,4 +152,66 @@ individual question '/question/<int:question_id>' (quiz.html)
 
 API submit quiz '/api/submitQuiz'
 `````````````````````````````````
-| text
+| Our submit quiz API method tries to save a completed quiz to the database.
+| We expect the (link here) to call this when a quiz is finished.
+| Our first point of order is to check we have answers:
+.. code-block:: python
+
+    @app.route('/api/submitQuiz', methods=['POST'])
+    def submit_quiz():
+        # Read and validate the JSON payload from the request body
+        data = request.get_json(silent=True)
+        if not data or 'answers' not in data or not isinstance(data['answers'], list):
+            return jsonify({'error': 'Missing or invalid answers payload'}), 400
+
+        answers = data['answers']
+        if not answers:
+            return jsonify({'error': 'No answers submitted'}), 400
+
+| We make sure to set our placeholder user id too!
+| Feedback in the database is associated with a user, so we need this.
+.. code-block:: python
+    
+    user_id = 1
+
+| Then we iterate over our answers, tearing out the data into separate lists.
+| We wrap the whole thing in a try, and catch any malformed data to throw errors.
+| Once we've pulled the whole thing into lists, we make the query to add the feedback to database.
+.. code-block:: python
+    try:
+        que_id_list = []
+        ans_corr_list = []
+        user_ans_ind_list = []
+
+        for answer in answers:
+            q_id = answer.get('qID')
+            selected = answer.get('selected')
+            is_correct = answer.get('isCorrect')
+
+            if q_id is None or selected is None or is_correct is None:
+                return jsonify({'error': 'Invalid answer object'}), 400
+
+            que_id_list.append(int(q_id))
+            user_ans_ind_list.append(int(selected))
+            ans_corr_list.append(bool(is_correct))
+        
+        # Save all the answers as a singular feedback record 
+        DB_query_insert_feedback(
+            user_id=user_id,
+            que_id_list=que_id_list,
+            ans_corr_list=ans_corr_list,
+            user_ans_ind_list=user_ans_ind_list,
+        )
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Answer values must be valid numbers/booleans'}), 400
+    except Exception as exc:
+        return jsonify({'error': f'Failed to save quiz feedback: {exc}'}), 500
+
+| We then confirm it didn't go horribly wrong:
+.. code-block:: python
+
+    return jsonify({
+        'status': 'saved',
+        'answerCount': len(answers),
+    }), 200
+
