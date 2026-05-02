@@ -178,6 +178,7 @@ API submit quiz '/api/submitQuiz'
 | We wrap the whole thing in a try, and catch any malformed data to throw errors.
 | Once we've pulled the whole thing into lists, we make the query to add the feedback to database.
 .. code-block:: python
+
     try:
         que_id_list = []
         ans_corr_list = []
