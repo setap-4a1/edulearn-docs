@@ -127,7 +127,13 @@ quiz form view '/quiz' (quiz.html/start_quiz.html)
 
 quiz topic selection view '/start_quiz' (start_quiz.html)
 `````````````````````````````````````````````````````````
-| text
+| This route loads the quiz topic/limit selection form.
+| Users will select a topic and question limit (3-20) for their quiz.
+.. code-block:: python
+
+    @app.route('/start_quiz')
+    def start_quiz():
+        return render_template("start_quiz.html")
 
 individual question '/question/<int:question_id>' (quiz.html)
 `````````````````````````````````````````````````````````````
