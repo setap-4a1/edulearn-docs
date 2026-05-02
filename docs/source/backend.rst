@@ -88,7 +88,12 @@ quiz feedback detail view '/quiz_feedback' (quiz_feedback.html)
 
 login form view '/login' (login.html)
 `````````````````````````````````````
-| text
+| This route loads our (very placeholder) login template.
+.. code-block:: python
+
+    @app.route('/login', methods=['GET'])
+    def login():
+        return render_template("login.html")
 
 quiz form view '/quiz' (quiz.html/start_quiz.html)
 ``````````````````````````````````````````````````
