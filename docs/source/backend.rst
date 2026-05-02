@@ -219,8 +219,8 @@ submit quiz '/api/submitQuiz'
         'answerCount': len(answers),
     }), 200
 
-health check
-````````````
+health check 'api/health'
+`````````````````````````
 | Simple health check - if this still works we know we haven't nuked the entire app!
 .. code-block:: python
 
