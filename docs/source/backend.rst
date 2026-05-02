@@ -150,8 +150,11 @@ individual question '/question/<int:question_id>' (quiz.html)
 
         return render_template("quiz.html", questions=[transform_db_question(db_question)])
 
-API submit quiz '/api/submitQuiz'
-`````````````````````````````````
+API
+---
+
+submit quiz '/api/submitQuiz'
+`````````````````````````````
 | Our submit quiz API method tries to save a completed quiz to the database.
 | We expect the (link here) to call this when a quiz is finished.
 | Our first point of order is to check we have answers:
@@ -216,8 +219,8 @@ API submit quiz '/api/submitQuiz'
         'answerCount': len(answers),
     }), 200
 
-API health check
-````````````````
+health check
+````````````
 | Simple health check - if this still works we know we haven't nuked the entire app!
 .. code-block:: python
 
