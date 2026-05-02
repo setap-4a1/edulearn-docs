@@ -97,7 +97,33 @@ login form view '/login' (login.html)
 
 quiz form view '/quiz' (quiz.html/start_quiz.html)
 ``````````````````````````````````````````````````
-| text
+| Our quiz route tries to gather a random selection of questions from a specified topic up to a specified limit.
+| The topic and limit are expected to come through with the page request. We set a default limit of 5 questions.
+.. code-block:: python
+
+    @app.route('/quiz')
+    def quiz():
+        topic = request.args.get('topic')
+        limit = request.args.get('limit', type=int, default=5)
+
+| We show topic selection instead if there's no selected topic;
+.. code-block:: python
+
+    if not topic:
+        return render_template("start_quiz.html")
+
+| We load our questions from the database using (link to subheading), and 404 if there's no questions;
+.. code-block:: python
+
+    db_questions = DB_query_questions_list([topic], limit)
+    if not db_questions:
+        return jsonify({'error': f'No questions found for topic: {topic}'}), 404
+
+| We turn our database questions into the JSON our template expects using (link to subheading), and then pass it through to the quiz template.
+.. code-block:: python
+
+    selected_questions = [transform_db_question(row) for row in db_questions]
+    return render_template("quiz.html", questions=selected_questions)
 
 quiz topic selection view '/start_quiz' (start_quiz.html)
 `````````````````````````````````````````````````````````
