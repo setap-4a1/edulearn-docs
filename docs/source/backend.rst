@@ -19,6 +19,7 @@ quiz summaries view '/feedback' (feedback.html)
 `````````````````````````````````````````````
 | Our feedback route loads the quiz summaries for a given user id (hardcoded to 1) and loads them into the feedback.html page.  
 .. code-block:: python
+
     @app.route("/feedback", methods=['GET'])
     def feedback():
         user_id = 1
