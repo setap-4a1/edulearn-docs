@@ -218,7 +218,7 @@ API submit quiz '/api/submitQuiz'
 
 API health check
 ````````````````
-| Simple health check - if this still works we know we haven't nuked the entire app
+| Simple health check - if this still works we know we haven't nuked the entire app!
 .. code-block:: python
 
     @app.route('/api/health')
