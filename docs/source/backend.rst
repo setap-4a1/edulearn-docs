@@ -231,7 +231,23 @@ Query helpers
 
 connector
 `````````
-| text
+| Sets up a database connection with the local sqlite database file, and returns it.
+.. code-block:: python
+
+    def connector(): 
+        SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) 
+        DB_PATH = os.path.join(SCRIPT_DIR, "edulearn.db")
+        return sqlite3.connect(DB_PATH)
+
+get_cursor
+``````````
+| Returns a database connection along with a cursor, for DB methods to use.
+.. code-block:: python
+
+    def get_cursor():
+        connection = connector()
+        connection.row_factory = sqlite3.Row
+        return connection, connection.cursor()
 
 Questions
 `````````
