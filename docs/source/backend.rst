@@ -298,7 +298,34 @@ DB_query_questions_list
 
 DB_query_question_by_id
 ^^^^^^^^^^^^^^^^^^^^^^^
-| text
+| Gather question data for a specified question ID.
+| Returns a single dictionary.
+| This is used only in the individual question ID route.
+.. code-block:: python
+
+    def DB_query_question_by_id(que_id):
+        connection, cursor = get_cursor()
+
+        query = """
+            SELECT q.QUE_ID,
+                q.QUE_question,
+                q.QUE_ans_1,
+                q.QUE_ans_2,
+                q.QUE_ans_3,
+                q.QUE_ans_4,
+                q.QUE_ans_correct,
+                t.TOP_name
+            FROM QUESTIONS q
+            JOIN TOPICS t ON q.TOP_ID = t.TOP_ID
+            WHERE q.QUE_ID = ?
+        """
+
+        cursor.execute(query, (que_id,))
+        row = cursor.fetchone()
+        connection.close()
+
+        return dict(row) if row else None
+
 
 DB_query_questions_ans
 ^^^^^^^^^^^^^^^^^^^^^^
