@@ -254,7 +254,47 @@ Questions
 
 DB_query_questions_list
 ^^^^^^^^^^^^^^^^^^^^^^^
-| text 
+| This function pulls a list of random questions from the provided topic(s).
+| We only gather up to the specified limit of questions, if provied.
+| 'placeholders' is used to feed the topic(s) into the query - there'll be a '?' for each topic, which is then replaced with the passed topic names when the query is made.
+| We only append limit to the query if a limit is provided.
+| Our list of questions is returned as a list of dictionaries, which then get transformed and fed to the quiz template.
+.. code-block:: python
+
+    def DB_query_questions_list(topic_list, limit=None): # takes in a list of topics
+        if not topic_list:
+            return []
+
+        connection, cursor = get_cursor()
+
+        placeholders = ",".join("?" for _ in topic_list)
+        
+        query = f"""
+            SELECT q.QUE_ID,
+                q.QUE_question,
+                q.QUE_ans_1,
+                q.QUE_ans_2,
+                q.QUE_ans_3,
+                q.QUE_ans_4,
+                q.QUE_ans_correct,
+                t.TOP_name
+            FROM QUESTIONS q
+            JOIN TOPICS t ON q.TOP_ID = t.TOP_ID
+            WHERE t.TOP_name IN ({placeholders})
+            ORDER BY RANDOM()
+        """
+
+        if limit is not None:
+            query += " LIMIT ?"
+            cursor.execute(query, (*topic_list, limit))
+        else:
+            cursor.execute(query, topic_list)
+
+        rows = cursor.fetchall()
+        connection.close()
+
+        return [dict(row) for row in rows]
+
 
 DB_query_question_by_id
 ^^^^^^^^^^^^^^^^^^^^^^^
