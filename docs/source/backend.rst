@@ -399,7 +399,42 @@ DB_query_user_quiz_summaries
 
 DB_query_quiz_feedback_detail
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| text
+| Fetches feedback details for a given feedback and user id.
+| Returns all feedback question and answer data in a list of dictionaries, one dict per feedback item.
+| Ordering of query by row id is done so that the feedback display shows questions in order by default.
+.. code-block:: python
+    
+    def DB_query_quiz_feedback_detail(user_id, feed_id):
+    connection = connector()
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+            f.FEED_ID AS feed_id,
+            t.TOP_name AS topic,
+            q.QUE_ID AS question_id,
+            q.QUE_question AS question_text,
+            q.QUE_ans_1 AS option_1,
+            q.QUE_ans_2 AS option_2,
+            q.QUE_ans_3 AS option_3,
+            q.QUE_ans_4 AS option_4,
+            q.QUE_ans_correct AS correct_answer_index,
+            f.FEED_user_answer_index AS user_answer_index,
+            f.FEED_answer_status AS is_correct
+        FROM FEEDBACK f
+        JOIN QUESTIONS q ON q.QUE_ID = f.QUE_ID
+        JOIN TOPICS t ON t.TOP_ID = q.TOP_ID
+        WHERE f.ACC_ID = ? AND f.FEED_ID = ?
+        ORDER BY f.rowid
+        """,
+        (user_id, feed_id)
+    )
+
+    rows = cursor.fetchall()
+    connection.close()
+    return [dict(row) for row in rows]
 
 Misc helpers
 ------------
