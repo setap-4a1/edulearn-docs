@@ -354,7 +354,49 @@ DB_query_insert_feedback
 
 DB_query_user_quiz_summaries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| text
+| Grabs all quiz summaries for a given user ID.
+| Returned as a list of dictionaries.
+| We pull together and calculate a few data items in the query:
+- topic name is 'Mixed' if multiple question topics are present
+- total_questions is the number of questions
+- correct_count tallies correct answers
+- score_percent calculates percentage of correct answers
+.. code-block:: python
+
+    def DB_query_user_quiz_summaries(user_id):
+        connection = connector()
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+
+        cursor.execute(
+            """
+            SELECT
+                f.FEED_ID AS feed_id,
+                CASE
+                    WHEN COUNT(DISTINCT t.TOP_name) = 1 THEN MIN(t.TOP_name)
+                    ELSE 'Mixed'
+                END AS topic,
+                COUNT(*) AS total_questions,
+                SUM(CASE WHEN f.FEED_answer_status = 1 THEN 1 ELSE 0 END) AS correct_count,
+                ROUND(
+                    100.0 * SUM(CASE WHEN f.FEED_answer_status = 1 THEN 1 ELSE 0 END) / COUNT(*),
+                    0
+                ) AS score_percent
+            FROM FEEDBACK f
+            JOIN QUESTIONS q ON q.QUE_ID = f.QUE_ID
+            JOIN TOPICS t ON t.TOP_ID = q.TOP_ID
+            WHERE f.ACC_ID = ?
+            GROUP BY f.FEED_ID
+            ORDER BY f.FEED_ID DESC
+            """,
+            (user_id,)
+        )
+
+        rows = cursor.fetchall()
+        connection.close()
+        return [dict(row) for row in rows]
+
+
 DB_query_quiz_feedback_detail
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | text
