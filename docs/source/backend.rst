@@ -326,11 +326,6 @@ DB_query_question_by_id
 
         return dict(row) if row else None
 
-
-DB_query_questions_ans
-^^^^^^^^^^^^^^^^^^^^^^
-| text
-
 Feedback
 ````````
 
