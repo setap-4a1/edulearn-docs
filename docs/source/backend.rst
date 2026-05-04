@@ -331,7 +331,27 @@ Feedback
 
 DB_query_insert_feedback
 ^^^^^^^^^^^^^^^^^^^^^^^^
-| text
+| Save a completed quiz attempt to the feedback table.
+| We increment feedback ID and create a new feedback entry from our provided quiz response data.
+.. code-block:: python
+
+    def DB_query_insert_feedback(user_id,que_id_list,ans_corr_list,user_ans_ind_list):
+        connection = connector()
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        
+        cursor.execute("SELECT COALESCE(MAX(FEED_ID), 0) + 1 FROM FEEDBACK")
+        feed_id = cursor.fetchone()[0]
+
+        for i in range(len(que_id_list)):
+            connection.execute("""
+                    INSERT INTO FEEDBACK (FEED_ID, ACC_ID, QUE_ID, FEED_answer_status, FEED_user_answer_index)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (feed_id, user_id, que_id_list[i], int(ans_corr_list[i]), user_ans_ind_list[i]))
+
+        connection.commit()
+        connection.close()
+
 DB_query_user_quiz_summaries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | text
