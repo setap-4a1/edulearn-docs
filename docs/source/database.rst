@@ -10,7 +10,7 @@ ERD
 
 ACCOUNTS TABLE 
 --------------
-| This table holds the accounts, accounts have an ID, username, password and an experience counter.  
+| This table holds data for user accounts.
 ============  ======================================================================================  ===========================================================================================================================
 Attribute     Purpose                                                                                 Data type & constraints
 ============  ======================================================================================  ===========================================================================================================================
@@ -20,9 +20,9 @@ ACC_password  Password, min length 8, requires 1 digit and 1 non-alphanumeric ch
 ACC_exp       Account experience level tracking (unused)                                              INT NOT NULL CHECK(ACC_exp >= 0)
 ============  ======================================================================================  ===========================================================================================================================
 
-| ACC_username is constrained as unique, this was done so that we could search for a user by their name allowing for an easier time finding the a user in the database. 
-| ACC_password has a number of constraints which collectively make it so that the password needs letters and numbers and capitals to be valid. 
-| ACC_exp is currently serving no purpose, it was added originally to match the initial scope of the edulearn project so that accounts could have progression but now it serves no purpose. 
+| ACC_username is constrained as unique so that users can easily identify each other. 
+| ACC_password has constraints which enforce use of digits and non-alphanumeric characters. 
+| ACC_exp is currently unused, it was intended to allow accounts could have progression, but this feature was scrapped. 
 
 FEEDBACK/QUIZ TABLE 
 -------------------
