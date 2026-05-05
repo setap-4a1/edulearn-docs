@@ -11,14 +11,14 @@ ERD
 ACCOUNTS TABLE 
 --------------
 | This table holds the accounts, accounts have an ID, username, password and an experience counter.  
-============  =============================================================================================================================  =======
-Attribute     Data type & constraints                                                                                                        Purpose
-============  =============================================================================================================================  =======
-ACC_ID        SERIAL PRIMARY KEY                                                                                                             Unique ID
-ACC_username  VARCHAR(26) NOT NULL UNIQUE                                                                                                    Unique username
-ACC_password  VARCHAR(16) NOT NULL CHECK (length(ACC_password)>=8 AND ACC_password GLOB '*[0-9]*' AND ACC_password GLOB '*[^a-zA-Z0-9]*')    Password, min length 8, requires 1 digit and 1 non-alphanumeric character for security
-ACC_exp       INT NOT NULL CHECK(ACC_exp >= 0)                                                                                               Account experience level tracking (unused)
-============  =============================================================================================================================  =======
+============  ======================================================================================  ===========================================================================================================================
+Attribute     Purpose                                                                                 Data type & constraints
+============  ======================================================================================  ===========================================================================================================================
+ACC_ID        Unique ID                                                                               SERIAL PRIMARY KEY
+ACC_username  Unique username                                                                         VARCHAR(26) NOT NULL UNIQUE
+ACC_password  Password, min length 8, requires 1 digit and 1 non-alphanumeric character for security  VARCHAR(16) NOT NULL CHECK (length(ACC_password)>=8 AND ACC_password GLOB '*[0-9]*' AND ACC_password GLOB '*[^a-zA-Z0-9]*')
+ACC_exp       Account experience level tracking (unused)                                              INT NOT NULL CHECK(ACC_exp >= 0)
+============  ======================================================================================  ===========================================================================================================================
 
 | ACC_username is constrained as unique, this was done so that we could search for a user by their name allowing for an easier time finding the a user in the database. 
 | ACC_password has a number of constraints which collectively make it so that the password needs letters and numbers and capitals to be valid. 
