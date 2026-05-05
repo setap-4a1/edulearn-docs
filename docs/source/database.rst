@@ -30,8 +30,8 @@ FEEDBACK/QUIZ TABLE
 Attribute               Purpose                                                                                 Data type & constraints
 ======================  ======================================================================================  ===========================================================
 FEED_ID                 Identifier for feedback                                                                 INT NOT NULL 
-ACC_ID                  Identifier for account                                                                  INT NOT NULL REFERENCES ACCOUNTS (ACC_ID)
-QUE_ID                  Question number in quiz                                                                 INT NOT NULL REFERENCES QUESTIONS (QUE_ID)
+ACC_ID                  Identifier for account                                                                  INT NOT NULL, REFERENCES ACCOUNTS (ACC_ID)
+QUE_ID                  Question number in quiz                                                                 INT NOT NULL, REFERENCES QUESTIONS (QUE_ID)
 FEED_answer_status      Answer correct/incorrect boolean                                                        INT NOT NULL CHECK(ACC_exp >= 0)
 FEED_user_answer_index  Which answer the user selected for the question                                         INT NOT NULL CHECK (FEED_user_answer_index BETWEEN 0 AND 3)
 ======================  ======================================================================================  ===========================================================
@@ -42,6 +42,19 @@ FEED_user_answer_index  Which answer the user selected for the question         
 
 QUESTIONS TABLE 
 ---------------
+
+===============  ======================================  ====================================================
+Attribute        Purpose                                 Data type & constraints
+===============  ======================================  ====================================================
+QUE_ID           Unique question ID                      SERIAL PRIMARY KEY
+TOP_ID           Topic ID                                INT NOT NULL, REFERENCES TOPICS (TOP_ID)
+QUE_question     Question text                           VARCHAR(120) NOT NULL
+QUE_ans_1        Answer 1 text                           VARCHAR(120) NOT NULL
+QUE_ans_2        Answer 2 text                           VARCHAR(120) NOT NULL
+QUE_ans_3        Answer 3 text                           VARCHAR(120) NOT NULL
+QUE_ans_4        Answer 4 text                           VARCHAR(120) NOT NULL
+QUE_ans_correct  Correct answer index (0-3)              INT NOT NULL CHECK (QUE_ans_correct BETWEEN 0 AND 3)
+===============  ======================================  ====================================================
 
 | The questions table stores the sum of all the questions in the database, each question is grouped by topic, hence the TOP_ID. 
 | QUE_question stores the question text. 
