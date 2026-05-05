@@ -133,6 +133,8 @@ Start Quiz form
 
 | Note the form's 'action' property - this causes the submission to pass through the form's 'limit' and 'topic' values directly to the quiz form page.
 
+.. _quiz-form:
+
 Quiz form
 ---------
 | The quiz form displays multiple-choice questions to users, showing them correct/incorrect on answer selection.
