@@ -56,7 +56,8 @@ QUE_ans_4        Answer 4 text                           VARCHAR(120) NOT NULL
 QUE_ans_correct  Correct answer index (0-3)              INT NOT NULL CHECK (QUE_ans_correct BETWEEN 0 AND 3)
 ===============  ======================================  ====================================================
 
-| The questions table stores the sum of all the questions in the database, each question is grouped by topic, hence the TOP_ID. 
+| The questions table stores all the questions.
+| TOP_ID denotes the topic the question is associated with.
 | QUE_question stores the question text. 
 | QUE_ans_1-4 stores each of the 4 answers texts. 
 | QUE_ans_correct stores which answer is correct, it is constrained to only accept an index of 0-3 matching the 4 possible answers. 
