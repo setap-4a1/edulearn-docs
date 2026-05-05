@@ -133,7 +133,7 @@ Start Quiz form
 
 | Note the form's 'action' property - this causes the submission to pass through the form's 'limit' and 'topic' values directly to the quiz form page.
 
-.. quiz-form:
+.. _quiz-form:
 
 Quiz form
 ---------
