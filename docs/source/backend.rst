@@ -46,7 +46,7 @@ quiz feedback detail view '/quiz_feedback' (quiz_feedback.html)
             error="Select a completed quiz from your profile first.",
         )
 
-| We pull the feedback using (link to function subheading here)
+| We pull the feedback using `DB_query_quiz_feedback_detail`_
 .. code-block:: python
 
     questions = DB_query_quiz_feedback_detail(user_id, feed_id)
@@ -110,14 +110,14 @@ quiz form view '/quiz' (quiz.html/start_quiz.html)
     if not topic:
         return render_template("start_quiz.html")
 
-| We load our questions from the database using (link to subheading), and 404 if there's no questions;
+| We load our questions from the database using `DB_query_questions_list`_, and 404 if there's no questions;
 .. code-block:: python
 
     db_questions = DB_query_questions_list([topic], limit)
     if not db_questions:
         return jsonify({'error': f'No questions found for topic: {topic}'}), 404
 
-| We turn our database questions into the JSON our template expects using (link to subheading), and then pass it through to the quiz template.
+| We turn our database questions into the JSON our template expects using `transform_db_question`_, and then pass it through to the quiz template.
 .. code-block:: python
 
     selected_questions = [transform_db_question(row) for row in db_questions]
@@ -154,7 +154,7 @@ API
 submit quiz '/api/submitQuiz'
 `````````````````````````````
 | Our submit quiz API method tries to save a completed quiz to the database.
-| We expect the (link here) to call this when a quiz is finished.
+| We expect the :ref:`quiz-form` to call this when a quiz is finished.
 | Our first point of order is to check we have answers:
 .. code-block:: python
 
