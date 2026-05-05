@@ -26,6 +26,15 @@ ACC_exp       Account experience level tracking (unused)                        
 
 FEEDBACK/QUIZ TABLE 
 -------------------
+======================  ======================================================================================  ===========================================================
+Attribute               Purpose                                                                                 Data type & constraints
+======================  ======================================================================================  ===========================================================
+FEED_ID                 Identifier for feedback                                                                 INT NOT NULL 
+ACC_ID                  Identifier for account                                                                  INT NOT NULL REFERENCES ACCOUNTS (ACC_ID)
+QUE_ID                  Question number in quiz                                                                 INT NOT NULL REFERENCES QUESTIONS (QUE_ID)
+FEED_answer_status      Answer correct/incorrect boolean                                                        INT NOT NULL CHECK(ACC_exp >= 0)
+FEED_user_answer_index  Which answer the user selected for the question                                         INT NOT NULL CHECK (FEED_user_answer_index BETWEEN 0 AND 3)
+======================  ======================================================================================  ===========================================================
 
 | The feedback table intersects between the accounts and questions table, it exists to store the results of a users quiz for the purposes of feedback. 
 | The table uses a composite key with FEED_ID, QUE_ID and ACC_ID. ACC_ID points to which user the feedback regards, the FEED_ID differentiates each quiz/feedback object and the QUE_ID refers to which question the entry regards. 
