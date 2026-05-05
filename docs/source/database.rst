@@ -36,9 +36,13 @@ FEED_answer_status      Answer correct/incorrect boolean                        
 FEED_user_answer_index  Which answer the user selected for the question                                         INT NOT NULL CHECK (FEED_user_answer_index BETWEEN 0 AND 3)
 ======================  ======================================================================================  ===========================================================
 
-| The feedback table intersects between the accounts and questions table, it exists to store the results of a users quiz for the purposes of feedback. 
-| The table uses a composite key with FEED_ID, QUE_ID and ACC_ID. ACC_ID points to which user the feedback regards, the FEED_ID differentiates each quiz/feedback object and the QUE_ID refers to which question the entry regards. 
-| FEED_answer status stores if the question was answered correctly while FEED_user_answer_index stores which option the user chose in the quiz, these are stored so that we can reconstruct the quiz later so that the user can see what they got right/wrong. 
+| The feedback table intersects between the accounts and questions table, storing the results of a users quiz for use in feedback. 
+| The table uses a composite key with FEED_ID, QUE_ID and ACC_ID: 
+- FEED_ID differentiates each quiz/feedback object
+- ACC_ID points to which user the feedback is for
+- QUE_ID refers to which question the entry regards
+| FEED_answer_status stores if the question was answered correctly.
+| FEED_user_answer_index stores which option the user chose, allowing us to show the user what they got right/wrong. 
 
 QUESTIONS TABLE 
 ---------------
