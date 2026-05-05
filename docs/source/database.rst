@@ -65,3 +65,10 @@ TOPIC TABLE
 -----------
 
 | As mentioned above each question is grouped by a topic (maths, physics, etc) in the topic table we have an ID for the primary key and a unique TOP_name which denotes the topic in question. 
+
+=========  ===============================  ===========================
+Attribute  Purpose                          Data type & constraints
+=========  ===============================  ===========================
+TOP_ID     Unique topic ID                  SERIAL PRIMARY KEY
+TOP_name   Topic name                       VARCHAR(30) NOT NULL UNIQUE
+=========  ===============================  =========================== 
