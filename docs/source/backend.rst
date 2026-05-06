@@ -249,8 +249,8 @@ get_cursor
         connection.row_factory = sqlite3.Row
         return connection, connection.cursor()
 
-Questions
-`````````
+Question queries
+````````````````
 
 DB_query_questions_list
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -326,8 +326,8 @@ DB_query_question_by_id
 
         return dict(row) if row else None
 
-Feedback
-````````
+Feedback queries
+````````````````
 
 DB_query_insert_feedback
 ^^^^^^^^^^^^^^^^^^^^^^^^
