@@ -1,9 +1,7 @@
-Template for the Read the Docs tutorial
-=======================================
+Edulearn Documentation
+======================
 
-This GitHub template includes fictional Python library
-with some basic Sphinx docs.
-
-Read the tutorial here:
-
-https://docs.readthedocs.io/en/stable/tutorial/
+| Read The Docs documentation for Edulearn, a Flask application that allows users to take quizzes on STEM subjects.  
+| 
+| Hosted at https://edulearn-docs-4a1.readthedocs.io/en/latest/  
+| Based on https://github.com/setap-4a1/Edulearn  
