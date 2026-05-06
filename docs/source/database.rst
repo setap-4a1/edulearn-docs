@@ -44,8 +44,8 @@ FEED_user_answer_index  Which answer the user selected for the question         
 - FEED_ID differentiates each quiz/feedback object
 - ACC_ID points to which user the feedback is for
 - QUE_ID refers to which question the entry regards
-| FEED_answer_status stores if the question was answered correctly.
-| FEED_user_answer_index stores which option the user chose, allowing us to show the user what they got right/wrong. 
+- FEED_answer_status stores if the question was answered correctly.
+- FEED_user_answer_index stores which option the user chose, allowing us to show the user what they got right/wrong. 
 
 QUESTIONS TABLE 
 ---------------
