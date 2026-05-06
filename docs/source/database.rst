@@ -34,6 +34,7 @@ ACC_exp       Account experience level tracking (unused)                        
 
 FEEDBACK/QUIZ TABLE 
 -------------------
+| The feedback table stores completed quizzes by a user.
 ======================  ======================================================================================  ===========================================================
 Attribute               Purpose                                                                                 Data type & constraints
 ======================  ======================================================================================  ===========================================================
@@ -54,7 +55,7 @@ FEED_user_answer_index  Which answer the user selected                          
 
 QUESTIONS TABLE 
 ---------------
-
+| The questions table stores all of our questions and associated data.
 ===============  ======================================  ====================================================
 Attribute        Purpose                                 Data type & constraints
 ===============  ======================================  ====================================================
@@ -68,7 +69,7 @@ QUE_ans_4        Answer 4 text                           VARCHAR(120) NOT NULL
 QUE_ans_correct  Correct answer index (0-3)              INT NOT NULL CHECK (QUE_ans_correct BETWEEN 0 AND 3)
 ===============  ======================================  ====================================================
 
-| The questions table stores all the questions.
+
 | TOP_ID denotes the topic the question is associated with.
 | QUE_question stores the question text. 
 | QUE_ans_1-4 stores each of the 4 answers texts. 
@@ -76,7 +77,7 @@ QUE_ans_correct  Correct answer index (0-3)              INT NOT NULL CHECK (QUE
 
 TOPIC TABLE 
 -----------
-
+| As shown above, each question belongs to a topic.
 =========  ===============================  ===========================
 Attribute  Purpose                          Data type & constraints
 =========  ===============================  ===========================
@@ -84,5 +85,4 @@ TOP_ID     Unique topic ID                  SERIAL PRIMARY KEY
 TOP_name   Topic name                       VARCHAR(30) NOT NULL UNIQUE
 =========  ===============================  =========================== 
 
-| As mentioned above, each question is grouped by a topic.
 | In the topic table we have a serial ID for the primary key and a unique TOP_name for a topic title. 
