@@ -1,7 +1,8 @@
 Database
 ========
 
-| the database handles the storing of long term information from user accounts to questions and feedback, the database is written in sqlite.
+| The database handles the storing of long term information, focusing on user accounts, questions, and feedback (summaries of taken quizzes)
+| The database is written in SQLite and stored as a local file.
 
 ERD 
 ---
@@ -9,7 +10,11 @@ ERD
 .. image:: images/edulearn_DB_ERD.drawio.png
 
 
-| Here you can see an overview of the design for the database we have 4 tables which each store information, an accounts table to store account data for users, a questions table to store questions, topics to group the questions by and a feedback table to store all the users answers for any quizzes the user has participated in. 
+| Here is an overview of the design for the database, we have 4 tables:
+- an accounts table to store account data for users 
+- a questions table to store questions
+- topics to group the questions by
+- a feedback table to store answers for any quizzes the user has taken. 
 
 ACCOUNTS TABLE 
 --------------
