@@ -10,7 +10,7 @@ ERD
 .. image:: images/edulearn_DB_ERD.drawio.png
 
 
-| Here is an overview of the design for the database, we have 4 tables:
+| Here is an overview of the design for the database, where we have 4 tables:
 - an accounts table to store account data for users 
 - a questions table to store questions
 - topics to group the questions by
