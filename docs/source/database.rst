@@ -77,12 +77,12 @@ QUE_ans_correct  Correct answer index (0-3)              INT NOT NULL CHECK (QUE
 TOPIC TABLE 
 -----------
 
-| As mentioned above, each question is grouped by a topic.
-| In the topic table we have a serial ID for the primary key and a unique TOP_name for a topic title. 
-
 =========  ===============================  ===========================
 Attribute  Purpose                          Data type & constraints
 =========  ===============================  ===========================
 TOP_ID     Unique topic ID                  SERIAL PRIMARY KEY
 TOP_name   Topic name                       VARCHAR(30) NOT NULL UNIQUE
 =========  ===============================  =========================== 
+
+| As mentioned above, each question is grouped by a topic.
+| In the topic table we have a serial ID for the primary key and a unique TOP_name for a topic title. 
