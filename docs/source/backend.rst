@@ -4,7 +4,7 @@ Backend
 Routes
 ------
 
-frontpage '/' (index.html)
+Front page view '/' (index.html)
 ``````````````````````
 | The route for our homepage is self-explanatory, taking the user to index.html:
 .. code-block:: python
@@ -13,7 +13,7 @@ frontpage '/' (index.html)
     def home():
         return render_template("index.html")
 
-quiz summaries view '/feedback' (feedback.html)
+Quiz summaries view '/feedback' (feedback.html)
 `````````````````````````````````````````````
 | Our feedback route loads the quiz summaries for a given user id (hardcoded to 1) and loads them into the feedback.html page.  
 .. code-block:: python
@@ -24,7 +24,7 @@ quiz summaries view '/feedback' (feedback.html)
         quizzes = DB_query_user_quiz_summaries(user_id)
         return render_template("feedback.html", quizzes=quizzes)
 
-quiz feedback detail view '/quiz_feedback' (quiz_feedback.html)
+Quiz feedback detail view '/quiz_feedback' (quiz_feedback.html)
 ```````````````````````````````````````````````````````````````
 | The quiz feedback view tries to gather detailed feedback for a specified quiz id.
 | We start by fetching feedback ID as provided in the request:
@@ -84,7 +84,7 @@ quiz feedback detail view '/quiz_feedback' (quiz_feedback.html)
     return render_template("quiz_feedback.html", summary=summary, questions=questions, error=None)
 
 
-login form view '/login' (login.html)
+Login form view '/login' (login.html)
 `````````````````````````````````````
 | This route loads our (very placeholder) login template.
 .. code-block:: python
@@ -93,8 +93,8 @@ login form view '/login' (login.html)
     def login():
         return render_template("login.html")
 
-quiz form view '/quiz' (quiz.html/start_quiz.html)
-``````````````````````````````````````````````````
+Quiz form view '/quiz' (quiz.html + start_quiz.html)
+````````````````````````````````````````````````````
 | Our quiz route tries to gather a random selection of questions from a specified topic up to a specified limit.
 | The topic and limit are expected to come through with the page request. We set a default limit of 5 questions.
 .. code-block:: python
@@ -134,7 +134,7 @@ quiz form view '/quiz' (quiz.html/start_quiz.html)
     selected_questions = [transform_db_question(row) for row in db_questions]
     return render_template("quiz.html", questions=selected_questions)
 
-quiz topic selection view '/start_quiz' (start_quiz.html)
+Quiz topic selection view '/start_quiz' (start_quiz.html)
 `````````````````````````````````````````````````````````
 | This route loads the quiz topic/limit selection form.
 | Users will select a topic and question limit (3-20) for their quiz.
@@ -144,7 +144,7 @@ quiz topic selection view '/start_quiz' (start_quiz.html)
     def start_quiz():
         return render_template("start_quiz.html")
 
-individual question '/question/<int:question_id>' (quiz.html)
+Individual question '/question/<int:question_id>' (quiz.html)
 `````````````````````````````````````````````````````````````
 | This quiz loads the quiz form but with a single question.
 | We return 404 if we can't find the question in the database.
@@ -162,7 +162,7 @@ individual question '/question/<int:question_id>' (quiz.html)
 API
 ---
 
-submit quiz '/api/submitQuiz'
+Submit quiz '/api/submitQuiz'
 `````````````````````````````
 | Our submit quiz API method tries to save a completed quiz to the database.
 | We expect the :ref:`quiz-form` to call this when a quiz is finished.
@@ -228,7 +228,7 @@ submit quiz '/api/submitQuiz'
         'answerCount': len(answers),
     }), 200
 
-health check 'api/health'
+Health check 'api/health'
 `````````````````````````
 | Simple health check - if this still works we know we haven't nuked the entire app!
 .. code-block:: python
@@ -240,7 +240,7 @@ health check 'api/health'
 Query helpers
 -------------
 
-database path resolvers
+Database path resolvers
 ```````````````````````
 | We have a couple of private methods for finding the database file:
 
@@ -253,8 +253,8 @@ _default_db_path
         script_dir = Path(__file__).resolve().parent
         return str(script_dir / "edulearn.db")
 
-resolve_db_path
-^^^^^^^^^^^^^^^
+_resolve_db_path
+^^^^^^^^^^^^^^^^
 | Checks if there's a config `DATABASE_PATH`, otherwise passes the default.
 | Custom `DATABASE_PATH` is used in testing configuration.
 .. code-block:: python
@@ -505,8 +505,8 @@ create_app
         flask_app = create_app()
         flask_app.run(debug=True, host='0.0.0.0', port=5000)
 
-transform_db_question()
-```````````````````````
+transform_db_question
+`````````````````````
 | This function takes a question from the database format and converts it into the format the frontend expects.
 | This is something we do a lot, so it's moved into its own helper.
 .. code-block:: python
