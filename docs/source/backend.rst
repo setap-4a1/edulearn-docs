@@ -478,8 +478,32 @@ DB_query_quiz_feedback_detail
     connection.close()
     return [dict(row) for row in rows]
 
-Misc helpers
-------------
+Misc
+----
+
+create_app
+``````````
+| We build the app with dummy secret key.
+| The default database path is fetched and added to config.
+.. code-block:: python
+
+    def create_app():
+    flask_app = Flask(__name__)
+    flask_app.config['SECRET_KEY'] = 'your-secret-key-here'
+
+    script_dir = Path(__file__).resolve().parent
+    db_path = str(script_dir / "edulearn.db")
+    flask_app.config.setdefault("DATABASE_PATH", db_path)
+
+    flask_app.register_blueprint(app)
+    return flask_app
+
+| We run this in debug whenever app.py runs.
+.. code-block:: python
+
+    if __name__ == '__main__':
+        flask_app = create_app()
+        flask_app.run(debug=True, host='0.0.0.0', port=5000)
 
 transform_db_question()
 ```````````````````````
