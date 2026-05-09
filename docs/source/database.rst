@@ -41,7 +41,7 @@ Attribute               Purpose                                                 
 FEED_ID                 Identifier for feedback                                                                 INT NOT NULL 
 ACC_ID                  Identifier for account                                                                  INT NOT NULL, REFERENCES ACCOUNTS (ACC_ID)
 QUE_ID                  Question number in quiz                                                                 INT NOT NULL, REFERENCES QUESTIONS (QUE_ID)
-FEED_answer_status      Answer correct/incorrect                                                                INT NOT NULL CHECK(ACC_exp >= 0)
+FEED_answer_status      Answer correct/incorrect                                                                BOOLEAN NOT NULL CHECK (FEED_answer_status IN (0, 1, 'TRUE', 'FALSE'))
 FEED_user_answer_index  Which answer the user selected                                                          INT NOT NULL CHECK (FEED_user_answer_index BETWEEN 0 AND 3)
 ======================  ======================================================================================  ===========================================================
 
