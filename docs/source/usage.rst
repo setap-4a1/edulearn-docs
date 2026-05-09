@@ -15,13 +15,3 @@ To run Edulearn, clone the repo at https://github.com/setap-4a1/Edulearn, instal
    $ pip install -r requirements.txt
    $ flask run
 
-
-Starting a Quiz
-----------------
-
-placeholder
-
-Viewing Feedback
-----------------
-
-placeholder
