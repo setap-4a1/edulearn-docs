@@ -240,15 +240,44 @@ health check 'api/health'
 Query helpers
 -------------
 
+database path resolvers
+```````````````````````
+| We have a couple of private methods for finding the database file:
+
+_default_db_path
+^^^^^^^^^^^^^^^^
+| Tries to find database in default location by first navigating to root, then root/edulearn.db.
+.. code-block:: python
+
+    def _default_db_path():
+        script_dir = Path(__file__).resolve().parent
+        return str(script_dir / "edulearn.db")
+
+resolve_db_path
+^^^^^^^^^^^^^^^
+| Checks if there's a config `DATABASE_PATH`, otherwise passes the default.
+| Custom `DATABASE_PATH` is used in testing configuration.
+.. code-block:: python
+
+    def _resolve_db_path():
+    try:
+        from flask import current_app
+
+        db_path = current_app.config.get("DATABASE_PATH")
+        if db_path:
+            return db_path
+    except RuntimeError:
+        pass
+
+    return _default_db_path()
+
 connector
 `````````
-| Sets up a database connection with the local sqlite database file, and returns it.
+| Sets up a database connection with the given sqlite database file, and returns it.
 .. code-block:: python
 
     def connector(): 
-        SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) 
-        DB_PATH = os.path.join(SCRIPT_DIR, "edulearn.db")
-        return sqlite3.connect(DB_PATH)
+        return sqlite3.connect(_resolve_db_path())
 
 get_cursor
 ``````````
