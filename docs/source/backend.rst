@@ -104,6 +104,17 @@ quiz form view '/quiz' (quiz.html/start_quiz.html)
         topic = request.args.get('topic')
         limit = request.args.get('limit', type=int, default=5)
 
+| We do some basic validation on the provided question limit;
+.. code-block:: python
+
+  try:
+    limit = int(limit)
+  except (ValueError, TypeError):
+    return "please provide an integer"
+
+  if limit < 3:
+    return "value must be greater than or equal to 3"
+
 | We show topic selection instead if there's no selected topic;
 .. code-block:: python
 
