@@ -282,10 +282,12 @@ connector
 get_cursor
 ``````````
 | Returns a database connection along with a cursor, for DB methods to use.
+| Enforces existing foreign keys for any data manipulation via sqlite PRAGMA command.
 .. code-block:: python
 
     def get_cursor():
         connection = connector()
+        connection.execute("PRAGMA foreign_keys = ON")
         connection.row_factory = sqlite3.Row
         return connection, connection.cursor()
 
