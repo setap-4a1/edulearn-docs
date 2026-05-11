@@ -509,9 +509,23 @@ transform_db_question
 `````````````````````
 | This function takes a question from the database format and converts it into the format the frontend expects.
 | This is something we do a lot, so it's moved into its own helper.
+| We check that all required fields are filled out, and return None if any are absent.
 .. code-block:: python
     
-    def transform_db_question(row):
+    def transform_db_question(row):    """Convert a database question row into the format the frontend is expecting."""
+    if not row:
+        return None
+
+    required_keys = [
+        "QUE_ID", "QUE_question", "QUE_ans_1", "QUE_ans_2", 
+        "QUE_ans_3", "QUE_ans_4", "QUE_ans_correct", "TOP_name"
+    ]
+
+    try:
+        for key in required_keys:
+            if key not in row or row[key] is None:
+                return None
+
         return {
             "id": row["QUE_ID"],
             "name": row["QUE_question"],
@@ -524,3 +538,5 @@ transform_db_question
             "correctOption": row["QUE_ans_correct"],
             "topic": row["TOP_name"],
         }
+    except (KeyError, TypeError):
+        return None
