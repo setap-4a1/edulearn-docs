@@ -96,13 +96,13 @@ Login form view '/login' (login.html)
 Quiz form view '/quiz' (quiz.html + start_quiz.html)
 ````````````````````````````````````````````````````
 | Our quiz route tries to gather a random selection of questions from a specified topic up to a specified limit.
-| The topic and limit are expected to come through with the page request. We set a default limit of 5 questions.
+| The topic and limit are expected to come through with the page request.
 .. code-block:: python
 
     @app.route('/quiz')
     def quiz():
         topic = request.args.get('topic')
-        limit = request.args.get('limit', type=int, default=5)
+        limit = request.args.get('limit')
 
 | We do some basic validation on the provided question limit;
 .. code-block:: python
