@@ -193,15 +193,25 @@ Submit quiz '/api/submitQuiz'
         if not answers:
             return jsonify({'error': 'No answers submitted'}), 400
 
-| We make sure to set our placeholder user id too!
-| Feedback in the database is associated with a user, so we need this.
+| We set our placeholder user id as 1, but perform validation to ensure it's correct anyway.
+| Feedback in the database is associated with a user, so we need to provide this.
 .. code-block:: python
     
-    user_id = 1
+    user_id = data.get('user_id', 1)  # Temporary until login/session is connected.
+    try:
+        user_id = int(user_id)
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Invalid user id'}), 400
+
+    if user_id <= 0:
+        return jsonify({'error': 'Invalid user id'}), 400
+
+    if not _user_exists(user_id):
+        return jsonify({'error': 'User does not exist'}), 400
 
 | Then we iterate over our answers, tearing out the data into separate lists.
 | We wrap the whole thing in a try, and catch any malformed data to throw errors.
-| Once we've pulled the whole thing into lists, we make the query to add the feedback to database.
+
 .. code-block:: python
 
     try:
@@ -210,18 +220,47 @@ Submit quiz '/api/submitQuiz'
         user_ans_ind_list = []
 
         for answer in answers:
-            q_id = answer.get('qID')
-            selected = answer.get('selected')
-            is_correct = answer.get('isCorrect')
+            q_id = answer.get('qID') if isinstance(answer, dict) else None
+            selected = answer.get('selected') if isinstance(answer, dict) else None
+            is_correct = answer.get('isCorrect') if isinstance(answer, dict) else None
+
+| We validate that the question data exists for every answer object.  
+| This means checking every question id, selected answer index, and correct/incorrect boolean.
+.. code-block:: python
 
             if q_id is None or selected is None or is_correct is None:
                 return jsonify({'error': 'Invalid answer object'}), 400
 
-            que_id_list.append(int(q_id))
-            user_ans_ind_list.append(int(selected))
-            ans_corr_list.append(bool(is_correct))
-        
-        # Save all the answers as a singular feedback record 
+            try:
+              q_id = int(q_id)
+              selected = int(selected)
+            except (ValueError, TypeError):
+              return jsonify({'error': 'Invalid answer object'}), 400
+
+            if q_id <= 0:
+              return jsonify({'error': 'Invalid question id'}), 400
+
+            if selected < 0 or selected > 3:
+              return jsonify({'error': 'Answer index out of range'}), 400
+
+            if isinstance(is_correct, bool):
+              is_correct = bool(is_correct)
+            elif is_correct in (0, 1):
+              is_correct = bool(is_correct)
+            else:
+              return jsonify({'error': 'Invalid answer correctness value'}), 400
+
+            que_id_list.append(q_id)
+            user_ans_ind_list.append(selected)
+            ans_corr_list.append(is_correct)
+
+        if not _question_ids_exist(que_id_list):
+          return jsonify({'error': 'Unknown question id'}), 400
+
+| Once we've pulled the whole thing into lists, we make the query to add the feedback to database.
+| We have some backup exceptions just in case something else in the conversion process went wrong.
+.. code-block:: python
+
         DB_query_insert_feedback(
             user_id=user_id,
             que_id_list=que_id_list,
