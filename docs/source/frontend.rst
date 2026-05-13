@@ -145,6 +145,7 @@ Quiz form
 
     <div class="container">
       <div class="question-box">
+        {% if questions and questions|length > 0 %}
         <p id="questionCounter" class="question-counter">Question 1 out of {{ questions | length }}</p>
 
         {% for question in questions %}
@@ -165,14 +166,28 @@ Quiz form
         <div id="feedback" class="feedback"></div>
 
         <div class="button-group">
-          <button type="button" class="submit-btn" id="nextBtn" disabled>Next</button>
+          <button
+            type="button"
+            class="submit-btn"
+            id="nextBtn"
+            {% if questions|length == 1 %}style="display: none;"{% endif %}
+            disabled
+          >Next</button>
           <button type="button" class="submit-btn" id="finishBtn" style="display: none;">Finish</button>
         </div>
+        {% else %}
+        <article class="feedback-card">
+          <p>{{ error or 'No questions to show.' }}</p>
+        </article>
+        {% endif %}
       </div>
+
     </div>
+
 | Syntax highlighting for this code block is Jinja only, but it does help show how Jinja affords us the flexibility to dynamically render multiple form options based on provided data.
 | The basic way to think of it is: this form takes a set of questions, which each contain a set of options.
 | Jinja allows us to iterate over these bits of data and dynamically populate our form with it.
+| The form also displays a fallback error message if there is no question data provided.
 | The form itself expects to have all of the question data provided when it is loaded, it's not fetching back and forth multiple times in 1 quiz.
 
 | You may still be confused on what we're doing with this empty 'feedback' div and the two submit buttons.
