@@ -104,16 +104,22 @@ Quiz form view '/quiz' (quiz.html + start_quiz.html)
         topic = request.args.get('topic')
         limit = request.args.get('limit')
 
-| We do some basic validation on the provided question limit;
+| First, we check if the topic actually has something there, redirecting to the start quiz form if not;
+.. code-block:: python
+
+    if not topic or topic.strip() == "" or topic.isdigit():
+        return redirect(url_for('app.start_quiz'))
+
+| We check if the provided question limit is a number between 3 and 20, again redirecting if anything is awry;
 .. code-block:: python
 
   try:
     limit = int(limit)
   except (ValueError, TypeError):
-    return "please provide an integer"
+    return redirect(url_for('app.start_quiz'))
 
-  if limit < 3:
-    return "value must be greater than or equal to 3"
+  if limit < 3 or limit > 20:
+    return redirect(url_for('app.start_quiz'))
 
 | We show topic selection instead if there's no selected topic;
 .. code-block:: python
@@ -121,17 +127,18 @@ Quiz form view '/quiz' (quiz.html + start_quiz.html)
     if not topic:
         return render_template("start_quiz.html")
 
-| We load our questions from the database using `DB_query_questions_list`_, and 404 if there's no questions;
+| We load our questions from the database using `DB_query_questions_list`_, or grab an empty list if there's no questions;
 .. code-block:: python
 
     db_questions = DB_query_questions_list([topic], limit)
-    if not db_questions:
-        return jsonify({'error': f'No questions found for topic: {topic}'}), 404
+    if not isinstance(db_questions, list):
+        db_questions = []
 
-| We turn our database questions into the JSON our template expects using `transform_db_question`_, and then pass it through to the quiz template.
+| We turn our database questions into the JSON our template expects using `transform_db_question`_, clean out any empty questions, and then pass it through to the quiz template.
 .. code-block:: python
 
     selected_questions = [transform_db_question(row) for row in db_questions]
+    selected_questions = [question for question in selected_questions if question is not None]
     return render_template("quiz.html", questions=selected_questions)
 
 Quiz topic selection view '/start_quiz' (start_quiz.html)
