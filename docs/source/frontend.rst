@@ -327,58 +327,99 @@ Answer selection event
 
 Styling
 ```````
-| Styling for the form itself is pretty light:
+| All the style for the quiz template:
+| We start with the box that the entire question is held in, with styling for question title, question number, etc.
 .. code-block:: css
 
-    .quiz-form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        text-align: left;
-    }
+  .question-box {
+      background-color: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+  }
 
-    .option {
-        display: flex;
-        align-items: center;
-        padding: 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
+  .question-box.wide {
+      max-width: 900px;
+  }
 
-    .option:hover {
-        border-color: #f39c12;
-        background-color: #fef5e7;
-    }
+  .question-box h1 {
+      text-align: center;
+      margin-bottom: 20px;
+  }
 
-    .option input[type="checkbox"] {
-        width: 20px;
-        height: 20px;
-        margin-right: 15px;
-        cursor: pointer;
-    }
+  .question-box h2 {
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-size: 1.5rem;
+  }
 
-    .option span {
-        font-size: 1.1rem;
-        color: #333;
-    }
+  .question-counter {
+      text-align: center;
+      color: #666;
+      margin-bottom: 10px;
+  }
 
-    .submit-btn {
-        margin-top: 20px;
-        padding: 15px 30px;
-        background-color: #f39c12;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
+  .quiz-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      text-align: left;
+  }
 
-| The interactible buttons explicitly set the cursor to pointer, which helps make it a bit more clear to the user.
-| The options flex nice and wide to fit the form, giving the user plenty of room to click.
+| Continuing onto styles for the checkbox buttons.
+| The interactible buttons change colour on hover and explicitly set the cursor to pointer, which helps indicate that they're interactible.
+| The buttons also flex wide to fit the form box, giving the user plenty of room to click.
+.. code-block:: css
+
+  .option {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+  }
+
+  .option:hover {
+      border-color: #f39c12;
+      background-color: #fef5e7;
+  }
+
+  .option input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 15px;
+      cursor: pointer;
+  }
+
+  .option span {
+      font-size: 1.1rem;
+      color: #333;
+  }
+
+| Style for question correct/incorrect feedback.
+| Short and sweet - green/red for correct/incorrect, style applied by checkbox JS.
+.. code-block:: css
+
+  .feedback {
+      margin-top: 20px;
+      padding: 15px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+  }
+
+  .feedback.correct {
+      color: #155724;
+  }
+
+  .feedback.incorrect {
+      color: #721c24;
+  }
+
 | Everything follows the same off-white background + orange accent as the rest of the design.
 
 Feedback list
