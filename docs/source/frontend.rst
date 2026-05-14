@@ -453,7 +453,7 @@ Feedback list
     </section>
 
 | Like the quiz form, this page expects to have the feedback data provided to it when it is loaded.
-| This page leans heavily on Jinja to dynamically display data within the template.
+| This page leans heavily on Jinja to dynamically display data within the template, and have a fallback error display if there is none.
 | The view feedback button will take the user directly to the feedback detail view for that particular feedback object.
 | Much of the styling is re-used from the start quiz form.
 Feedback detail view
