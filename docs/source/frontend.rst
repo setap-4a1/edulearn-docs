@@ -120,15 +120,15 @@ Start Quiz form
 | These three boxes are each actually their own form; when clicked, they send the user to the quiz form, passing through the selected topic and desired number of questions.
 .. code-block:: html
 
-    <form action="/quiz" method="GET" class="topic-card" style="display: flex; flex-direction: column;">
-        <h2>Mathematics</h2>
-        <p style="flex-grow: 1;">Test your knowledge in Algebra, Geometry, and Calculus.</p>
-        <div class="module-settings">
-            <label>Number of questions:</label>
-            <input name="limit" type="number" min="3" max="20" step="1" value="10">
-        </div>
-        <input type="hidden" name="topic" value="maths">
-        <button type="submit" class="submit-btn">Take a quiz</button>
+    <form action="/quiz" method="GET" class="topic-card">
+      <h2>Mathematics</h2>
+      <p>Test your knowledge in Algebra, Geometry, and Calculus.</p>
+      <div class="topic-settings">
+        <label>Number of questions:</label>
+        <input name="limit" type="number" min="3" max="20" step="1" value="10">
+      </div>
+      <input type="hidden" name="topic" value="maths">
+      <button type="submit" class="submit-btn">Take a quiz</button>
     </form>
 
 | Note the form's 'action' property - this causes the submission to pass through the form's 'limit' and 'topic' values directly to the quiz form page.
@@ -145,6 +145,7 @@ Quiz form
 
     <div class="container">
       <div class="question-box">
+        {% if questions and questions|length > 0 %}
         <p id="questionCounter" class="question-counter">Question 1 out of {{ questions | length }}</p>
 
         {% for question in questions %}
@@ -165,14 +166,28 @@ Quiz form
         <div id="feedback" class="feedback"></div>
 
         <div class="button-group">
-          <button type="button" class="submit-btn" id="nextBtn" disabled>Next</button>
+          <button
+            type="button"
+            class="submit-btn"
+            id="nextBtn"
+            {% if questions|length == 1 %}style="display: none;"{% endif %}
+            disabled
+          >Next</button>
           <button type="button" class="submit-btn" id="finishBtn" style="display: none;">Finish</button>
         </div>
+        {% else %}
+        <article class="feedback-card">
+          <p>{{ error or 'No questions to show.' }}</p>
+        </article>
+        {% endif %}
       </div>
+
     </div>
+
 | Syntax highlighting for this code block is Jinja only, but it does help show how Jinja affords us the flexibility to dynamically render multiple form options based on provided data.
 | The basic way to think of it is: this form takes a set of questions, which each contain a set of options.
 | Jinja allows us to iterate over these bits of data and dynamically populate our form with it.
+| The form also displays a fallback error message if there is no question data provided.
 | The form itself expects to have all of the question data provided when it is loaded, it's not fetching back and forth multiple times in 1 quiz.
 
 | You may still be confused on what we're doing with this empty 'feedback' div and the two submit buttons.
@@ -184,19 +199,36 @@ Quiz form JS
 
 showQuestion
 ************
-| Code for our show question function:
+| We have a showQuestion function that gets called when the Next question button is clicked, and on form initialisation.
+| We start by sanitising the input question number, checking it isn't a bool and that it's a number between 1 and the quiz length:
 .. code-block:: javascript
 
     function showQuestion(questionNumber) {
+      if (typeof questionNumber === 'boolean') {
+        return;
+      }
+
+      const parsedQuestionNumber = Number(questionNumber);
+      if (!Number.isInteger(parsedQuestionNumber)) {
+        return;
+      }
+
+      if (parsedQuestionNumber < 1 || parsedQuestionNumber > totalQuestions) {
+        return;
+      }
+
+| For our given number, we show the relevant data, update question number, clear our correct/incorrect feedback and disable our next/finish button as necessary:
+.. code-block:: javascript
+
       for (let i = 1; i <= totalQuestions; i++) {
         document.getElementById(`question${i}`).style.display = 'none';
       }
 
-      document.getElementById(`question${questionNumber}`).style.display = 'block';
+      document.getElementById(`question${parsedQuestionNumber}`).style.display = 'block';
 
-      document.getElementById('questionCounter').textContent = `Question ${questionNumber} out of ${totalQuestions}`;
+      document.getElementById('questionCounter').textContent = `Question ${parsedQuestionNumber} out of ${totalQuestions}`;
 
-      document.getElementById('nextBtn').style.display = questionNumber < totalQuestions ? 'inline-block' : 'none';
+      document.getElementById('nextBtn').style.display = parsedQuestionNumber < totalQuestions ? 'inline-block' : 'none';
       document.getElementById('nextBtn').disabled = true;
       document.getElementById('finishBtn').style.display = 'none';
 
@@ -204,11 +236,9 @@ showQuestion
       document.getElementById('feedback').className = 'feedback';
     }
 
-| This gets called whenever we display a new question.
-| Basically, we show the relevant data, update question number, clear our correct/incorrect feedback and disable our next/finish button (more on those later)
-
 Finish/Next button clicks
 *************************
+| The next button click is fairly self-explanatory: show the next question if we have one to show.
 .. code-block:: javascript
 
     document.getElementById('nextBtn').addEventListener('click', function() {
@@ -218,24 +248,30 @@ Finish/Next button clicks
       }
     });
 
-    document.getElementById('finishBtn').addEventListener('click', async function() {
-      const payload = {answers: Object.values(userAnswers)};
+| Our finish button fires off our answers to the backend to eventually be stored as feedback objects.
+| If there are incomplete answers, we don't send answers off, just redirect to home.
+.. code-block:: javascript
+
+      document.getElementById('finishBtn').addEventListener('click', async function() {
+      const answers = Object.values(userAnswers);
+      if (answers.length < totalQuestions) {
+        window.location.href = '/';
+        return;
+      }
+
+      const payload = {answers};
 
       const response = await fetch('/api/submitQuiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
+
       const result = await response.json();
       console.log(result);
 
-      // Redirect to index page
       window.location.href = '/';
     });
-
-
-| The next button click is fairly self-explanatory: show the next question if we have one to show.
-| Our finish button fires off our answers to the backend to eventually be stored as feedback objects.
 
 Answer selection event
 **********************
@@ -291,58 +327,99 @@ Answer selection event
 
 Styling
 ```````
-| Styling for the form itself is pretty light:
+| All the style for the quiz template:
+| We start with the box that the entire question is held in, with styling for question title, question number, etc.
 .. code-block:: css
 
-    .quiz-form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        text-align: left;
-    }
+  .question-box {
+      background-color: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+  }
 
-    .option {
-        display: flex;
-        align-items: center;
-        padding: 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
+  .question-box.wide {
+      max-width: 900px;
+  }
 
-    .option:hover {
-        border-color: #f39c12;
-        background-color: #fef5e7;
-    }
+  .question-box h1 {
+      text-align: center;
+      margin-bottom: 20px;
+  }
 
-    .option input[type="checkbox"] {
-        width: 20px;
-        height: 20px;
-        margin-right: 15px;
-        cursor: pointer;
-    }
+  .question-box h2 {
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-size: 1.5rem;
+  }
 
-    .option span {
-        font-size: 1.1rem;
-        color: #333;
-    }
+  .question-counter {
+      text-align: center;
+      color: #666;
+      margin-bottom: 10px;
+  }
 
-    .submit-btn {
-        margin-top: 20px;
-        padding: 15px 30px;
-        background-color: #f39c12;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
+  .quiz-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      text-align: left;
+  }
 
-| The interactible buttons explicitly set the cursor to pointer, which helps make it a bit more clear to the user.
-| The options flex nice and wide to fit the form, giving the user plenty of room to click.
+| Continuing onto styles for the checkbox buttons.
+| The interactible buttons change colour on hover and explicitly set the cursor to pointer, which helps indicate that they're interactible.
+| The buttons also flex wide to fit the form box, giving the user plenty of room to click.
+.. code-block:: css
+
+  .option {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+  }
+
+  .option:hover {
+      border-color: #f39c12;
+      background-color: #fef5e7;
+  }
+
+  .option input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 15px;
+      cursor: pointer;
+  }
+
+  .option span {
+      font-size: 1.1rem;
+      color: #333;
+  }
+
+| Style for question correct/incorrect feedback.
+| Short and sweet - green/red for correct/incorrect, style applied by checkbox JS.
+.. code-block:: css
+
+  .feedback {
+      margin-top: 20px;
+      padding: 15px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+  }
+
+  .feedback.correct {
+      color: #155724;
+  }
+
+  .feedback.incorrect {
+      color: #721c24;
+  }
+
 | Everything follows the same off-white background + orange accent as the rest of the design.
 
 Feedback list
@@ -376,7 +453,7 @@ Feedback list
     </section>
 
 | Like the quiz form, this page expects to have the feedback data provided to it when it is loaded.
-| This page leans heavily on Jinja to dynamically display data within the template.
+| This page leans heavily on Jinja to dynamically display data within the template, and have a fallback error display if there is none.
 | The view feedback button will take the user directly to the feedback detail view for that particular feedback object.
 | Much of the styling is re-used from the start quiz form.
 Feedback detail view

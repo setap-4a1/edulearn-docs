@@ -96,24 +96,30 @@ Login form view '/login' (login.html)
 Quiz form view '/quiz' (quiz.html + start_quiz.html)
 ````````````````````````````````````````````````````
 | Our quiz route tries to gather a random selection of questions from a specified topic up to a specified limit.
-| The topic and limit are expected to come through with the page request. We set a default limit of 5 questions.
+| The topic and limit are expected to come through with the page request.
 .. code-block:: python
 
     @app.route('/quiz')
     def quiz():
         topic = request.args.get('topic')
-        limit = request.args.get('limit', type=int, default=5)
+        limit = request.args.get('limit')
 
-| We do some basic validation on the provided question limit;
+| First, we check if the topic actually has something there, redirecting to the start quiz form if not;
+.. code-block:: python
+
+    if not topic or topic.strip() == "" or topic.isdigit():
+        return redirect(url_for('app.start_quiz'))
+
+| We check if the provided question limit is a number between 3 and 20, again redirecting if anything is awry;
 .. code-block:: python
 
   try:
     limit = int(limit)
   except (ValueError, TypeError):
-    return "please provide an integer"
+    return redirect(url_for('app.start_quiz'))
 
-  if limit < 3:
-    return "value must be greater than or equal to 3"
+  if limit < 3 or limit > 20:
+    return redirect(url_for('app.start_quiz'))
 
 | We show topic selection instead if there's no selected topic;
 .. code-block:: python
@@ -121,17 +127,18 @@ Quiz form view '/quiz' (quiz.html + start_quiz.html)
     if not topic:
         return render_template("start_quiz.html")
 
-| We load our questions from the database using `DB_query_questions_list`_, and 404 if there's no questions;
+| We load our questions from the database using `DB_query_questions_list`_, or grab an empty list if there's no questions;
 .. code-block:: python
 
     db_questions = DB_query_questions_list([topic], limit)
-    if not db_questions:
-        return jsonify({'error': f'No questions found for topic: {topic}'}), 404
+    if not isinstance(db_questions, list):
+        db_questions = []
 
-| We turn our database questions into the JSON our template expects using `transform_db_question`_, and then pass it through to the quiz template.
+| We turn our database questions into the JSON our template expects using `transform_db_question`_, clean out any empty questions, and then pass it through to the quiz template.
 .. code-block:: python
 
     selected_questions = [transform_db_question(row) for row in db_questions]
+    selected_questions = [question for question in selected_questions if question is not None]
     return render_template("quiz.html", questions=selected_questions)
 
 Quiz topic selection view '/start_quiz' (start_quiz.html)
@@ -147,17 +154,23 @@ Quiz topic selection view '/start_quiz' (start_quiz.html)
 Individual question '/question/<int:question_id>' (quiz.html)
 `````````````````````````````````````````````````````````````
 | This quiz loads the quiz form but with a single question.
-| We return 404 if we can't find the question in the database.
+| If we can't find the question in the database, we pass an empty list (the form itself has an error message it displays).
 | Mostly exists for debugging, but nice to have.
 .. code-block:: python
 
     @app.route('/question/<int:question_id>')
     def question(question_id):
-        db_question = DB_query_question_by_id(question_id)
-        if db_question is None:
-            return "Question not found", 404
+    db_question = DB_query_question_by_id(question_id)
+    if db_question is None:
+        return render_template(
+        "quiz.html",
+        questions=[],
+        )
 
-        return render_template("quiz.html", questions=[transform_db_question(db_question)])
+    return render_template(
+        "quiz.html",
+        questions=[transform_db_question(db_question)],
+    )
 
 API
 ---
@@ -180,15 +193,25 @@ Submit quiz '/api/submitQuiz'
         if not answers:
             return jsonify({'error': 'No answers submitted'}), 400
 
-| We make sure to set our placeholder user id too!
-| Feedback in the database is associated with a user, so we need this.
+| We set our placeholder user id as 1, but perform validation to ensure it's correct anyway.
+| Feedback in the database is associated with a user, so we need to provide this.
 .. code-block:: python
     
-    user_id = 1
+    user_id = data.get('user_id', 1)  # Temporary until login/session is connected.
+    try:
+        user_id = int(user_id)
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Invalid user id'}), 400
+
+    if user_id <= 0:
+        return jsonify({'error': 'Invalid user id'}), 400
+
+    if not _user_exists(user_id):
+        return jsonify({'error': 'User does not exist'}), 400
 
 | Then we iterate over our answers, tearing out the data into separate lists.
 | We wrap the whole thing in a try, and catch any malformed data to throw errors.
-| Once we've pulled the whole thing into lists, we make the query to add the feedback to database.
+
 .. code-block:: python
 
     try:
@@ -197,18 +220,47 @@ Submit quiz '/api/submitQuiz'
         user_ans_ind_list = []
 
         for answer in answers:
-            q_id = answer.get('qID')
-            selected = answer.get('selected')
-            is_correct = answer.get('isCorrect')
+            q_id = answer.get('qID') if isinstance(answer, dict) else None
+            selected = answer.get('selected') if isinstance(answer, dict) else None
+            is_correct = answer.get('isCorrect') if isinstance(answer, dict) else None
+
+| We validate that the question data exists for every answer object.  
+| This means checking every question id, selected answer index, and correct/incorrect boolean.
+.. code-block:: python
 
             if q_id is None or selected is None or is_correct is None:
                 return jsonify({'error': 'Invalid answer object'}), 400
 
-            que_id_list.append(int(q_id))
-            user_ans_ind_list.append(int(selected))
-            ans_corr_list.append(bool(is_correct))
-        
-        # Save all the answers as a singular feedback record 
+            try:
+              q_id = int(q_id)
+              selected = int(selected)
+            except (ValueError, TypeError):
+              return jsonify({'error': 'Invalid answer object'}), 400
+
+            if q_id <= 0:
+              return jsonify({'error': 'Invalid question id'}), 400
+
+            if selected < 0 or selected > 3:
+              return jsonify({'error': 'Answer index out of range'}), 400
+
+            if isinstance(is_correct, bool):
+              is_correct = bool(is_correct)
+            elif is_correct in (0, 1):
+              is_correct = bool(is_correct)
+            else:
+              return jsonify({'error': 'Invalid answer correctness value'}), 400
+
+            que_id_list.append(q_id)
+            user_ans_ind_list.append(selected)
+            ans_corr_list.append(is_correct)
+
+        if not _question_ids_exist(que_id_list):
+          return jsonify({'error': 'Unknown question id'}), 400
+
+| Once we've pulled the whole thing into lists, we make the query to add the feedback to database.
+| We have some backup exceptions just in case something else in the conversion process went wrong.
+.. code-block:: python
+
         DB_query_insert_feedback(
             user_id=user_id,
             que_id_list=que_id_list,
@@ -297,7 +349,7 @@ Question queries
 DB_query_questions_list
 ^^^^^^^^^^^^^^^^^^^^^^^
 | This function pulls a list of random questions from the provided topic(s).
-| We only gather up to the specified limit of questions, if provied.
+| We only gather up to the specified limit of questions.
 | 'placeholders' is used to feed the topic(s) into the query - there'll be a '?' for each topic, which is then replaced with the passed topic names when the query is made.
 | We only append limit to the query if a limit is provided.
 | Our list of questions is returned as a list of dictionaries, which then get transformed and fed to the quiz template.
@@ -305,6 +357,9 @@ DB_query_questions_list
 
     def DB_query_questions_list(topic_list, limit=None): # takes in a list of topics
         if not topic_list:
+            return []
+        
+        if limit is not None and isinstance(limit, (int)) and limit < 0:
             return []
 
         connection, cursor = get_cursor()
