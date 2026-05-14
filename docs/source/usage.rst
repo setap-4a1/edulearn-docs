@@ -22,6 +22,7 @@ Testing
 | A running local instance will be required for Selenium tests.
 
 .. code-block:: bash
+   
    pytest
    pytest --cov  # Generates a coverage report
 
