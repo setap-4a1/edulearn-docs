@@ -15,3 +15,12 @@ To run Edulearn, clone the repo at https://github.com/setap-4a1/Edulearn, instal
    $ pip install -r requirements.txt
    $ flask run
 
+Testing
+-------
+
+| To run the test suite, make sure you have installed the requirements and then run pytest.
+| A running local instance will be required for Selenium tests.
+.. code-block:: bash
+   pytest
+   pytest --cov  # Generates a coverage report
+
