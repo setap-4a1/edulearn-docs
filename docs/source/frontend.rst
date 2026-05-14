@@ -199,28 +199,42 @@ Quiz form JS
 
 showQuestion
 ************
-| Code for our show question function:
+| We have a showQuestion function that gets called when the Next question button is clicked, and on form initialisation.
+| We start by sanitising the input question number, checking it isn't a bool and that it's a number between 1 and the quiz length:
 .. code-block:: javascript
 
     function showQuestion(questionNumber) {
+      if (typeof questionNumber === 'boolean') {
+        return;
+      }
+
+      const parsedQuestionNumber = Number(questionNumber);
+      if (!Number.isInteger(parsedQuestionNumber)) {
+        return;
+      }
+
+      if (parsedQuestionNumber < 1 || parsedQuestionNumber > totalQuestions) {
+        return;
+      }
+
+| For our given number, we show the relevant data, update question number, clear our correct/incorrect feedback and disable our next/finish button as necessary:
+.. code-block:: javascript
+
       for (let i = 1; i <= totalQuestions; i++) {
         document.getElementById(`question${i}`).style.display = 'none';
       }
 
-      document.getElementById(`question${questionNumber}`).style.display = 'block';
+      document.getElementById(`question${parsedQuestionNumber}`).style.display = 'block';
 
-      document.getElementById('questionCounter').textContent = `Question ${questionNumber} out of ${totalQuestions}`;
+      document.getElementById('questionCounter').textContent = `Question ${parsedQuestionNumber} out of ${totalQuestions}`;
 
-      document.getElementById('nextBtn').style.display = questionNumber < totalQuestions ? 'inline-block' : 'none';
+      document.getElementById('nextBtn').style.display = parsedQuestionNumber < totalQuestions ? 'inline-block' : 'none';
       document.getElementById('nextBtn').disabled = true;
       document.getElementById('finishBtn').style.display = 'none';
 
       document.getElementById('feedback').textContent = '';
       document.getElementById('feedback').className = 'feedback';
     }
-
-| This gets called whenever we display a new question.
-| Basically, we show the relevant data, update question number, clear our correct/incorrect feedback and disable our next/finish button (more on those later)
 
 Finish/Next button clicks
 *************************
