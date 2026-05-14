@@ -238,6 +238,7 @@ showQuestion
 
 Finish/Next button clicks
 *************************
+| The next button click is fairly self-explanatory: show the next question if we have one to show.
 .. code-block:: javascript
 
     document.getElementById('nextBtn').addEventListener('click', function() {
@@ -247,24 +248,30 @@ Finish/Next button clicks
       }
     });
 
-    document.getElementById('finishBtn').addEventListener('click', async function() {
-      const payload = {answers: Object.values(userAnswers)};
+| Our finish button fires off our answers to the backend to eventually be stored as feedback objects.
+| If there are incomplete answers, we don't send answers off, just redirect to home.
+.. code-block:: javascript
+
+      document.getElementById('finishBtn').addEventListener('click', async function() {
+      const answers = Object.values(userAnswers);
+      if (answers.length < totalQuestions) {
+        window.location.href = '/';
+        return;
+      }
+
+      const payload = {answers};
 
       const response = await fetch('/api/submitQuiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
+
       const result = await response.json();
       console.log(result);
 
-      // Redirect to index page
       window.location.href = '/';
     });
-
-
-| The next button click is fairly self-explanatory: show the next question if we have one to show.
-| Our finish button fires off our answers to the backend to eventually be stored as feedback objects.
 
 Answer selection event
 **********************
